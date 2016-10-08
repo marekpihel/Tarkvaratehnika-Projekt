@@ -27,9 +27,14 @@ public class SetName : MonoBehaviour {
 			characterName = input;
 			Debug.Log (characterName);
 		}
+        loadFirstLevel();
 	}
 
 	public void backToMainMenu() {
 		SceneManager.LoadScene ("MainMenu");
+	}
+
+	public void loadFirstLevel(){
+		SceneManager.LoadScene("LevelOne");
 	}
 }
