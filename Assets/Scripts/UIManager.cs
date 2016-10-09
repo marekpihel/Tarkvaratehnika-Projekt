@@ -26,12 +26,20 @@ public class UIManager : MonoBehaviour {
 	void Update () {
 	
 	}
-
-	public void ExitPress () {
-		SceneManager.LoadScene ("QuitMenu");
-	}
 		
 	public void PlayPress() {
 		SceneManager.LoadScene ("SetName");
+	}
+
+	public void HighScorePress() {
+		SceneManager.LoadScene ("HighScore");
+	}
+
+	public void SettingsPress() {
+		SceneManager.LoadScene ("Settings");
+	}
+
+	public void ExitPress () {
+		SceneManager.LoadScene ("QuitMenu");
 	}
 }

@@ -26,8 +26,8 @@ public class SetName : MonoBehaviour {
 		} else {
 			characterName = input;
 			Debug.Log (characterName);
+			loadFirstLevel();
 		}
-        loadFirstLevel();
 	}
 
 	public void backToMainMenu() {
