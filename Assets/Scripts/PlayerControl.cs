@@ -3,33 +3,29 @@ using System.Collections;
 
 public class PlayerControl : MonoBehaviour
 {
-
+    float speed = 64.0f;                         // Speed of movement
+    Rigidbody2D rbody;
+    Animator anim;
     void Start()
     {
+        rbody = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
     void Update()
     {
-        Movement();
-    }
+        Vector2 movement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
-    void Movement()
-    {
-        if (Input.GetKey(KeyCode.D))
+        if (movement != Vector2.zero)
         {
-            transform.Translate(Vector2.right * 64 * Time.deltaTime);
-        }
-        if (Input.GetKey(KeyCode.A))
+            anim.SetBool("isWalking", true);
+            anim.SetFloat("input_x", movement.x);
+            anim.SetFloat("input_y", movement.y);
+        } else
         {
-            transform.Translate(Vector2.left * 64 * Time.deltaTime);
+            anim.SetBool("isWalking", false);
         }
-        if (Input.GetKey(KeyCode.W))
-        {
-            transform.Translate(Vector2.up * 64 * Time.deltaTime);
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            transform.Translate(Vector2.down * 64 * Time.deltaTime);
-        }
+
+        rbody.MovePosition(rbody.position + movement * speed * Time.deltaTime);
     }
 }
