@@ -47,9 +47,9 @@ public class Scoreboard : MonoBehaviour {
         File.WriteAllLines(@".\scoreboard.txt", listForWrite.Select(value => value.ToString()).ToArray());
     }
 
-    public static void ReadScoreboard() {
+    public static List<KeyValuePair<string, int>> ReadScoreboard() {
+        var listForRead = new List<KeyValuePair<string, int>>();
         if (File.Exists("scoreboard.txt")) {
-            var listForRead = new List<KeyValuePair<string, int>>();
             string[] lines = File.ReadAllLines(@".\scoreboard.txt");
 
             for (int i = 0; i < lines.Length; i++) {
@@ -65,5 +65,6 @@ public class Scoreboard : MonoBehaviour {
                 print("Line from textfile: " + listForRead[i]);
             }
         }
+        return listForRead;
     }
 }
