@@ -7,8 +7,7 @@ using System.Linq;
 public class Scoreboard : MonoBehaviour {
     // Use this for initialization
     void Start() {
-        WriteScoreboard("OK", 10);
-        ReadScoreboard();
+        WriteScoreboard("TESTVAL", 60);
     }
 
     // Update is called once per frame
@@ -18,21 +17,20 @@ public class Scoreboard : MonoBehaviour {
 
     public static void WriteScoreboard(String name, int score) {
 
-        var listForWrite = new List<KeyValuePair<string, int>>();
+        var listForWrite = ReadScoreboard();
 
         KeyValuePair<string, int> currentPair = new KeyValuePair<string, int>(name, score);
 
         // For testing
-        listForWrite.Add(new KeyValuePair<string, int>("Cat", 5));
-        listForWrite.Add(new KeyValuePair<string, int>("Dog", 2));
-        listForWrite.Add(new KeyValuePair<string, int>("Rabbit", 4));
+        //listForWrite.Add(new KeyValuePair<string, int>("rabbit", 1));
+        //listForWrite.Add(new KeyValuePair<string, int>("dog", 11));
+        //listForWrite.Add(new KeyValuePair<string, int>("x", 12));
+        //listForWrite.Add(new KeyValuePair<string, int>("marek", 100));
+        listForWrite.Add(currentPair);
 
         for (int i = 0; i < listForWrite.Count; i++) {
-            if (currentPair.Value > listForWrite[i].Value) {
-                listForWrite[0] = currentPair; //only add to list if bigger than top 10
-                listForWrite.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
-                break;
-            }
+             //only add to list if bigger than top 10
+            listForWrite.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
         }
 
         foreach (var element in listForWrite) {
@@ -59,7 +57,8 @@ public class Scoreboard : MonoBehaviour {
                 int valInt = Int32.Parse(line[1]);
                 listForRead.Add(new KeyValuePair<string, int>(valString, valInt));
             }
-            //listForRead.Reverse();
+            listForRead.Sort((x, y) => x.Value.CompareTo(y.Value));
+            listForRead.Reverse();
 
             for (int i = 0; i < lines.Length; i++) {
                 print("Line from textfile: " + listForRead[i]);
