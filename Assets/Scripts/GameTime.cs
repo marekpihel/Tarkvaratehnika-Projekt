@@ -12,6 +12,5 @@ public class GameTime : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         playedTime += Time.deltaTime;
-        print(Math.Round((playedTime), 2));
     }
 }
