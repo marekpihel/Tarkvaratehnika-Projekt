@@ -33,12 +33,7 @@ public class Scoreboard : MonoBehaviour {
             listForWrite.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
         }
 
-        foreach (var element in listForWrite) {
-            print(element);
-        }
-
         string path = Directory.GetCurrentDirectory();
-        print("Your scoreboard is saved in: " + path);
 
 
         listForWrite.Reverse();
@@ -59,10 +54,6 @@ public class Scoreboard : MonoBehaviour {
             }
             listForRead.Sort((x, y) => x.Value.CompareTo(y.Value));
             listForRead.Reverse();
-
-            for (int i = 0; i < lines.Length; i++) {
-                print("Line from textfile: " + listForRead[i]);
-            }
         }
         return listForRead;
     }
