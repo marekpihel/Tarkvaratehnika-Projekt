@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlayerControl : MonoBehaviour
 {
-    float speed = 64.0f;                         // Speed of movement
+    float speed = 128.0f;                         // Speed of movement
     Rigidbody2D rbody;
     Animator anim;
     void Start()
