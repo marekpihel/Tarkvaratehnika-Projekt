@@ -12,33 +12,37 @@ public class Scoreboard : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-
+  
     }
 
-    public static void WriteScoreboard(String name, int score) {
-
+    public static List<KeyValuePair<string, int>> WriteScoreboard(String name, int score) {
         var listForWrite = ReadScoreboard();
 
         KeyValuePair<string, int> currentPair = new KeyValuePair<string, int>(name, score);
-
+        listForWrite.Add(currentPair);
         // For testing
         //listForWrite.Add(new KeyValuePair<string, int>("rabbit", 1));
         //listForWrite.Add(new KeyValuePair<string, int>("dog", 11));
         //listForWrite.Add(new KeyValuePair<string, int>("x", 12));
         //listForWrite.Add(new KeyValuePair<string, int>("marek", 100));
-        listForWrite.Add(currentPair);
-
-        for (int i = 0; i < listForWrite.Count; i++) {
-             //only add to list if bigger than top 10
-            listForWrite.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
-        }
-
-        string path = Directory.GetCurrentDirectory();
 
 
-        listForWrite.Reverse();
+        listForWrite = OrderByValue(listForWrite);
+
+        //string path = Directory.GetCurrentDirectory();
+
+
         File.WriteAllLines(@".\scoreboard.txt", listForWrite.Select(value => value.ToString()).ToArray());
+        return listForWrite;
     }
+    public static List<KeyValuePair<string, int>> OrderByValue(List<KeyValuePair<string, int>> listToOrder) {
+        for (int i = 0; i < listToOrder.Count; i++) {
+            listToOrder.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+        }
+        listToOrder.Reverse();
+        return listToOrder;
+    }
+
 
     public static List<KeyValuePair<string, int>> ReadScoreboard() {
         var listForRead = new List<KeyValuePair<string, int>>();
@@ -52,8 +56,7 @@ public class Scoreboard : MonoBehaviour {
                 int valInt = Int32.Parse(line[1]);
                 listForRead.Add(new KeyValuePair<string, int>(valString, valInt));
             }
-            listForRead.Sort((x, y) => x.Value.CompareTo(y.Value));
-            listForRead.Reverse();
+            listForRead = OrderByValue(listForRead);
         }
         return listForRead;
     }
