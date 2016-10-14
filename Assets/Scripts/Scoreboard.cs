@@ -7,7 +7,7 @@ using System.Linq;
 public class Scoreboard : MonoBehaviour {
     // Use this for initialization
     void Start() {
-        WriteScoreboard("TESTVAL", 60);
+
     }
 
     // Update is called once per frame

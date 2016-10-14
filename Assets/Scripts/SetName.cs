@@ -25,6 +25,7 @@ public class SetName : MonoBehaviour {
 			alertText.text = "Please enter your character name!";
 		} else {
 			characterName = input;
+            Scoreboard.WriteScoreboard(characterName, 200);
 			Debug.Log (characterName);
 			loadFirstLevel();
 		}
