@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class QuitMenu : MonoBehaviour {
 
 	// public Canvas canvas;
-	// public Button yes;
-	// public Button no;
+	public Button yes;
+	public Button no;
 
 	// Use this for initialization
 	void Start () {
