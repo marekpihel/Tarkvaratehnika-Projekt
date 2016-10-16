@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayerControl : MonoBehaviour
 {
@@ -27,5 +28,12 @@ public class PlayerControl : MonoBehaviour
         }
 
         rbody.MovePosition(rbody.position + movement * speed * Time.deltaTime);
+    }
+
+    void OnTriggerEnter2D(Collider2D collisionObject) {
+        if (collisionObject.name == "trapdoor") {
+            Scoreboard.WriteScoreboard(SetName.getCharacterName(), (int)GameTime.getPlayedTime());
+            SceneManager.LoadScene("Highscore");
+        }
     }
 }

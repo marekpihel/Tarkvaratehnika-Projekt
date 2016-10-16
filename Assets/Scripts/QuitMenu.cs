@@ -23,13 +23,11 @@ public class QuitMenu : MonoBehaviour {
 
 	// exitMenu -> No
 	public void ExitNoPress() {
-		Debug.Log ("ExitNoPress");
 		SceneManager.LoadScene ("MainMenu");
 	}
 
 	// exitMenu -> Yes
 	public void QuitGame() {
-		Debug.Log ("QuitGame");
 		Application.Quit ();
 	}
 }

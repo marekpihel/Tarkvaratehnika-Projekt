@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 
 public class GameTime : MonoBehaviour {
-    double playedTime;
+    static double playedTime;
 	// Use this for initialization
 	void Start () {
         playedTime = 0f;
@@ -12,5 +12,9 @@ public class GameTime : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         playedTime += Time.deltaTime;
+    }
+
+    public static double getPlayedTime(){
+        return playedTime;
     }
 }

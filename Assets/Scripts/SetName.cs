@@ -8,7 +8,7 @@ public class SetName : MonoBehaviour {
 	public Text alertText;
 	public Text placeholderText;
 	string input;
-	string characterName;
+	static string characterName;
 
 	// Use this for initialization
 	void Start () {
@@ -25,8 +25,6 @@ public class SetName : MonoBehaviour {
 			alertText.text = "Please enter your character name!";
 		} else {
 			characterName = input;
-            Scoreboard.WriteScoreboard(characterName, 200);
-			Debug.Log (characterName);
 			loadFirstLevel();
 		}
 	}
@@ -38,4 +36,8 @@ public class SetName : MonoBehaviour {
 	public void loadFirstLevel(){
 		SceneManager.LoadScene("LevelOne");
 	}
+
+    public static string getCharacterName() {
+        return characterName;
+    }
 }
