@@ -19,7 +19,7 @@ public class HighScore : MonoBehaviour {
 
         foreach (KeyValuePair<string, int> entry in Scoreboard.ReadScoreboard()) {
             if (counter < 10) {
-                scoreBoardNumbering1.text += (counter +1) + " \n";
+                scoreBoardNumbering1.text += (counter +1) + ". \n";
                 name1.text += entry.Key + " \n";
                 score1.text += Convert.ToString(entry.Value) + " \n";
                 counter++;
