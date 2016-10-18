@@ -21,11 +21,14 @@ public class PlayerControl : MonoBehaviour
     private Text healthText;
     private Animator animator;
     private Rigidbody2D rigidBody2D;
+    private RaycastHit2D hit;
+    private BoxCollider2D boxCollider2D;
 
     public void Start()
     {
         animator = GetComponent<Animator>();
         rigidBody2D = GetComponent<Rigidbody2D>();
+        boxCollider2D = GetComponent<BoxCollider2D>();
 
         healthText = GameObject.Find("healthText").GetComponent<Text>();
         playerName = SetName.getCharacterName();
@@ -35,8 +38,11 @@ public class PlayerControl : MonoBehaviour
     public void Update()
     {
         gameTime = Mathf.Round((float)GameTime.getPlayedTime());
+
+
         if (!isMoving)
         {
+            t = 0;
             input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
             if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
                 input.y = 0;
@@ -48,6 +54,8 @@ public class PlayerControl : MonoBehaviour
                 StartCoroutine(move(transform));
             }
         }
+
+
         healthText.text = playerHealth.ToString();
         GameObject.Find("nameText").GetComponent<Text>().text = playerName + " : " + gameTime.ToString();
     }
@@ -62,18 +70,23 @@ public class PlayerControl : MonoBehaviour
         t = 0;
 
         endPosition = new Vector3(startPosition.x + System.Math.Sign(input.x) * gridSize, startPosition.y + System.Math.Sign(input.y) * gridSize, startPosition.z);
-
-        while (t < 1f)
+        boxCollider2D.enabled = false;
+        if (!Physics2D.Linecast(startPosition, endPosition))
         {
-            t += Time.deltaTime * (moveSpeed / gridSize);
-            transform.position = Vector3.Lerp(startPosition, endPosition, t);
-            yield return null;
+            boxCollider2D.enabled = true;
+            while (t < 1f)
+            {
+                t += Time.deltaTime * (moveSpeed / gridSize);
+                transform.position = Vector3.Lerp(startPosition, endPosition, t);
+                yield return null;
+            }
         }
-
         animator.SetBool("isWalking", false);
         isMoving = false;
         yield return 0;
     }
+
+
 
     void OnTriggerEnter2D(Collider2D collisionObject)
     {
