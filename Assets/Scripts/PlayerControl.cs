@@ -55,6 +55,10 @@ public class PlayerControl : MonoBehaviour
             }
         }
 
+        if (Input.GetButton("Jump")) {
+            print("Teleport");
+            this.transform.position = new Vector3(2944, -384, 0);
+        }
 
         healthText.text = playerHealth.ToString();
         GameObject.Find("nameText").GetComponent<Text>().text = playerName + " : " + gameTime.ToString();
@@ -91,7 +95,7 @@ public class PlayerControl : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collisionObject)
     {
         if (collisionObject.name == "trapdoor") {
-            Scoreboard.WriteScoreboard(SetName.getCharacterName(), (int)GameTime.getPlayedTime());
+            Scoreboard.WriteScoreboard(SetName.getCharacterName(), 300 - (int)GameTime.getPlayedTime());
             SceneManager.LoadScene("Highscore");
         }
     }
