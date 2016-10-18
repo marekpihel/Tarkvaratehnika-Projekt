@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using System;
 
 public class PlayerControl : MonoBehaviour
 {
@@ -11,6 +13,12 @@ public class PlayerControl : MonoBehaviour
     private Vector3 startPosition;
     private Vector3 endPosition;
     private float t;
+
+    private int playerHealth = 50;
+    private string playerName;
+
+    private double gameTime;
+    private Text healthText;
     private Animator animator;
     private Rigidbody2D rigidBody2D;
 
@@ -18,10 +26,15 @@ public class PlayerControl : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         rigidBody2D = GetComponent<Rigidbody2D>();
+
+        healthText = GameObject.Find("healthText").GetComponent<Text>();
+        playerName = SetName.getCharacterName();
+        gameTime = GameTime.getPlayedTime();
     }
 
     public void Update()
     {
+        gameTime = Mathf.Round((float)GameTime.getPlayedTime());
         if (!isMoving)
         {
             input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
@@ -35,6 +48,8 @@ public class PlayerControl : MonoBehaviour
                 StartCoroutine(move(transform));
             }
         }
+        healthText.text = playerHealth.ToString();
+        GameObject.Find("nameText").GetComponent<Text>().text = playerName + " : " + gameTime.ToString();
     }
 
     public IEnumerator move(Transform transform)
@@ -54,12 +69,14 @@ public class PlayerControl : MonoBehaviour
             transform.position = Vector3.Lerp(startPosition, endPosition, t);
             yield return null;
         }
+
         animator.SetBool("isWalking", false);
         isMoving = false;
         yield return 0;
     }
 
-    void OnTriggerEnter2D(Collider2D collisionObject) {
+    void OnTriggerEnter2D(Collider2D collisionObject)
+    {
         if (collisionObject.name == "trapdoor") {
             Scoreboard.WriteScoreboard(SetName.getCharacterName(), (int)GameTime.getPlayedTime());
             SceneManager.LoadScene("Highscore");
