@@ -1,47 +1,62 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using System;
 
 public class PlayerControl : MonoBehaviour
 {
-    int playerHealth = 50;
-    float speed = 128.0f;                         // Speed of movement
-    Rigidbody2D rbody;
-    Animator anim;
-    Text healthText;
-    string playerName;
-    double gameTime;
+    private float moveSpeed = 128f;
+    private float gridSize = 64f;
+    private Vector2 input;
+    private bool isMoving = false;
+    private Vector3 startPosition;
+    private Vector3 endPosition;
+    private float t;
+    private Animator animator;
+    private Rigidbody2D rigidBody2D;
 
-    void Start()
+    public void Start()
     {
-        rbody = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
-        healthText = GameObject.Find("healthText").GetComponent<Text>();
-        playerName = SetName.getCharacterName();
-        gameTime = GameTime.getPlayedTime();
+        animator = GetComponent<Animator>();
+        rigidBody2D = GetComponent<Rigidbody2D>();
     }
 
-    void Update()
+    public void Update()
     {
-        gameTime = Mathf.Round((float)GameTime.getPlayedTime());
-        Vector2 movement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        if (!isMoving)
+        {
+            input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
+                input.y = 0;
+            else
+                input.x = 0;
 
-        if (movement != Vector2.zero)
-        {
-            anim.SetBool("isWalking", true);
-            anim.SetFloat("input_x", movement.x);
-            anim.SetFloat("input_y", movement.y);
-        } else
-        {
-            anim.SetBool("isWalking", false);
+            if (input != Vector2.zero)
+            {
+                StartCoroutine(move(transform));
+            }
         }
+    }
 
-        rbody.MovePosition(rbody.position + movement * speed * Time.deltaTime);
+    public IEnumerator move(Transform transform)
+    {
+        isMoving = true;
+        animator.SetBool("isWalking", true);
+        animator.SetFloat("input_x", input.x);
+        animator.SetFloat("input_y", input.y);
+        startPosition = transform.position;
+        t = 0;
 
-        healthText.text = playerHealth.ToString();
-        GameObject.Find("nameText").GetComponent<Text>().text = playerName + " : " + gameTime.ToString();
+        endPosition = new Vector3(startPosition.x + System.Math.Sign(input.x) * gridSize, startPosition.y + System.Math.Sign(input.y) * gridSize, startPosition.z);
+
+        while (t < 1f)
+        {
+            t += Time.deltaTime * (moveSpeed / gridSize);
+            transform.position = Vector3.Lerp(startPosition, endPosition, t);
+            yield return null;
+        }
+        animator.SetBool("isWalking", false);
+        isMoving = false;
+        yield return 0;
     }
 
     void OnTriggerEnter2D(Collider2D collisionObject) {
