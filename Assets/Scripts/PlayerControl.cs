@@ -75,7 +75,8 @@ public class PlayerControl : MonoBehaviour
 
         endPosition = new Vector3(startPosition.x + System.Math.Sign(input.x) * gridSize, startPosition.y + System.Math.Sign(input.y) * gridSize, startPosition.z);
         boxCollider2D.enabled = false;
-        if (!Physics2D.Linecast(startPosition, endPosition))
+        hit = Physics2D.Raycast(startPosition, input, 64);
+        if (hit.collider == null)
         {
             boxCollider2D.enabled = true;
             while (t < 1f)
@@ -84,6 +85,20 @@ public class PlayerControl : MonoBehaviour
                 transform.position = Vector3.Lerp(startPosition, endPosition, t);
                 yield return null;
             }
+        } 
+        else if (hit.collider.tag == "Exit")
+        {
+            boxCollider2D.enabled = true;
+            while (t < 1f)
+            {
+                t += Time.deltaTime * (moveSpeed / gridSize);
+                transform.position = Vector3.Lerp(startPosition, endPosition, t);
+                yield return null;
+            }
+        }
+        else
+        {
+            //TO DO SOMETHING WHEN HITS THE WALL
         }
         animator.SetBool("isWalking", false);
         isMoving = false;
