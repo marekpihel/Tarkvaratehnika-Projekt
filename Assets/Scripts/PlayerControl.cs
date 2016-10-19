@@ -111,7 +111,12 @@ public class PlayerControl : MonoBehaviour
     {
         if (collisionObject.name == "trapdoor") {
             Scoreboard.WriteScoreboard(SetName.getCharacterName(), 300 - (int)GameTime.getPlayedTime());
-            SceneManager.LoadScene("Highscore");
+            Invoke("loadHighScoreScene", 1.2f);
         }
+    }
+
+    void loadHighScoreScene()
+    {
+        SceneManager.LoadScene("Highscore");
     }
 }
