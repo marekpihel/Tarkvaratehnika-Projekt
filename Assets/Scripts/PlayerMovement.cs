@@ -44,6 +44,9 @@ public class PlayerMovement : MonoBehaviour
             print("Teleport");
             this.transform.position = new Vector3(2944, -384, 0);
         }
+        if (Input.GetButton("Cancel")) {
+            SceneManager.LoadScene("MainMenu");
+        }
         updateUI();
     }
 
