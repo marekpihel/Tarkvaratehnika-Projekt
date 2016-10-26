@@ -10,10 +10,11 @@ public class PlayerMovement : MonoBehaviour
     private float waitOnLevelSwitch = 1f;
     private bool isMoving = false;
     private bool movementAllowedAfterExit = true;
-    private Vector2 input;
-    private int playerHealth = 50;
-    private string playerName;
-    private double gameTimeElapsed;
+    private Vector2 input;                                  //  Implement Attack animations
+    public int playerHealth = 50;                           //  Implement DMG taken
+    public int playerAttackDMG = 1;                         //  Implement DMG done
+    private string playerName;                              //  Implement Attack keybinds!
+    private double gameTimeElapsed;                         //  Implement Score loading on Death!
     private Text healthText;
     private Animator animator;
     private BoxCollider2D boxCollider2D;
@@ -29,12 +30,19 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
+    public void OnTriggerEnter2D(Collider2D collisionObject)
+    {
+        if (collisionObject.name == "trapdoor")
+            levelEnd();
+    }
+
+
     public void Update()
     {
         gameTimeElapsed = Mathf.Round((float)GameTime.getPlayedTime());
         if (!isMoving)
         {
-            input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));            // Input.GetAxisRaw Võib olla parem, kuid siis peab vaatama animatsioone
             disableDiagonalMovement();
             if (input != Vector2.zero)
                 StartCoroutine(move(transform));
@@ -44,8 +52,9 @@ public class PlayerMovement : MonoBehaviour
             print("Teleport");
             this.transform.position = new Vector3(2944, -384, 0);
         }
-        if (Input.GetButton("Cancel")) {
-            SceneManager.LoadScene("MainMenu");
+        if (Input.GetButton("Cancel"))
+        {
+            escMenu();
         }
         updateUI();
     }
@@ -87,20 +96,29 @@ public class PlayerMovement : MonoBehaviour
             return true;
         else if (hit.collider.tag == "Exit")
             return true;
+        else if (hit.collider.tag == "Enemy")
+        {
+            //Implement collision with enemy, DMG taken and done.
+            return false;
+        }
         else
             return false;
     }
 
 
-    public void OnTriggerEnter2D(Collider2D collisionObject)
+    private void escMenu()
     {
-        if (collisionObject.name == "trapdoor") {
-            movementAllowedAfterExit = false;
-            Scoreboard.WriteScoreboard(SetName.getCharacterName(), 300 - (int)GameTime.getPlayedTime());
-            Invoke("loadHighScoreScene", waitOnLevelSwitch);
-        }
+        SceneManager.LoadScene("MainMenu");
+        // Implement for Ceisi to make ingame pause maneu.
     }
 
+
+    private void levelEnd()
+    {
+        movementAllowedAfterExit = false;
+        Scoreboard.WriteScoreboard(SetName.getCharacterName(), 300 - (int)GameTime.getPlayedTime());
+        Invoke("loadHighScoreScene", waitOnLevelSwitch);
+    }
 
     private void loadHighScoreScene()
     {
@@ -131,6 +149,10 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool("isWalking", true);
             animator.SetFloat("input_x", input.x);
             animator.SetFloat("input_y", input.y);
+        }
+        else if (false)
+        {
+            //Deniss to make pixle art about attack animations!
         }
         else
         {
