@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     private string playerName;                              //  Implement Attack keybinds!
     private double gameTimeElapsed;                         //  Implement Score loading on Death!
     private Text healthText;
+    private int currentScore;
     private Animator animator;
     private BoxCollider2D boxCollider2D;
 
@@ -116,7 +117,8 @@ public class PlayerMovement : MonoBehaviour
     private void levelEnd()
     {
         movementAllowedAfterExit = false;
-        Scoreboard.WriteScoreboard(SetName.getCharacterName(), 300 - (int)GameTime.getPlayedTime());
+        currentScore = (int)(1 / (Mathf.Sqrt((float)gameTimeElapsed)) * 1000);
+        Scoreboard.WriteScoreboard(SetName.getCharacterName(), currentScore);
         Invoke("loadHighScoreScene", waitOnLevelSwitch);
     }
 
