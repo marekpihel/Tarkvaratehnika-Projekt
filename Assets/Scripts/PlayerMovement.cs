@@ -124,6 +124,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void loadHighScoreScene()
     {
+        Destroy(this.gameObject);
         SceneManager.LoadScene("Highscore");
     }
 
