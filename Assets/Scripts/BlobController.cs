@@ -26,16 +26,18 @@ public class BlobController : MonoBehaviour
 
     public void Update()
     {
+        /*
         if (!isMoving)
         {
             input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));            // Input.GetAxisRaw Võib olla parem, kuid siis peab vaatama animatsioone
             disableDiagonalMovement();
             if (input != Vector2.zero)
-                StartCoroutine(move(transform));
+                //StartCoroutine(move(transform));
         }
+        */
     }
 
-
+    /*
     private IEnumerator move(Transform transform)
     {
         isMoving = true;
@@ -64,6 +66,7 @@ public class BlobController : MonoBehaviour
         animateCharMovement();
         yield return 0;
     }
+    */
 
 
     private bool isAllowedToMove(RaycastHit2D hit)
