@@ -9,7 +9,9 @@ public class PlayerController : MonoBehaviour
     private float gridSize = 64f;
     private float waitOnLevelSwitch = 1f;
     private bool isMoving = false;
+    private bool isAttacking = false;
     private bool movementAllowedAfterExit = true;
+    private string playerDirection;
     private Vector2 input;                                  //  Implement Attack animations
     public int playerHealth = 50;                           //  Implement DMG taken
     public int playerAttackDMG = 1;                         //  Implement DMG done
@@ -43,8 +45,9 @@ public class PlayerController : MonoBehaviour
         gameTimeElapsed = Mathf.Round((float)GameTime.getPlayedTime());
         if (!isMoving)
         {
-            input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));            // Input.GetAxisRaw Võib olla parem, kuid siis peab vaatama animatsioone
+            input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));            // USE GetAxisRaw, edit animations to get same amount of frames, speak with Denis
             disableDiagonalMovement();
+            decidePlayerDirection();
             if (input != Vector2.zero)
                 StartCoroutine(move(transform));
         }
@@ -70,9 +73,9 @@ public class PlayerController : MonoBehaviour
         Vector3 endPosition = new Vector3(startPosition.x + System.Math.Sign(input.x) * gridSize, startPosition.y + System.Math.Sign(input.y) * gridSize, startPosition.z);
         boxCollider2D.enabled = false;
         RaycastHit2D hit = Physics2D.Raycast(startPosition, input, gridSize);
+        boxCollider2D.enabled = true;
         if (isAllowedToMove(hit))
         {
-            boxCollider2D.enabled = true;
             while (time < 1f)
             {
                 time += Time.deltaTime * (moveSpeed / gridSize);
@@ -137,6 +140,20 @@ public class PlayerController : MonoBehaviour
             input.x = 0;
     }
 
+    private void decidePlayerDirection()
+    {
+        if (input.x == 1)
+            playerDirection = "East";
+        else if (input.x == -1)
+            playerDirection = "West";
+        else if (input.y == 1)
+            playerDirection = "North";
+        else if (input.y == -1)
+            playerDirection = "South";
+        else
+            playerDirection = "Idle";
+    }
+
 
     private void updateUI()
     {
@@ -153,8 +170,9 @@ public class PlayerController : MonoBehaviour
             animator.SetFloat("input_x", input.x);
             animator.SetFloat("input_y", input.y);
         }
-        else if (false)
+        else if (isAttacking)
         {
+            animator.SetBool("isWalking", false);
             //Deniss to make pixle art about attack animations!
         }
         else
