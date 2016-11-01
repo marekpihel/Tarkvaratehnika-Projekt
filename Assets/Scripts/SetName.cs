@@ -23,6 +23,8 @@ public class SetName : MonoBehaviour {
 	public void confirmCharacterName() {
 		if (placeholderText.enabled == true) {
 			alertText.text = "Please enter your character name!";
+		} else if (input.Length > 20) {
+			alertText.text = "Name cannot be longer than 20 characters!";
 		} else {
 			characterName = input;
 			loadFirstLevel();
