@@ -15,6 +15,10 @@ public class Settings : MonoBehaviour {
 	
 	}
 
+	// TO-DO VOLUME MANIMUPLATION
+
+	// TO-DO RESOLUTION MANIPULATION
+
 	public void backToMainMenu() {
 		SceneManager.LoadScene ("MainMenu");
 	}

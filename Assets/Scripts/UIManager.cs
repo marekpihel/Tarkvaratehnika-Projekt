@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour {
 	public Button highscoreButton;
 	public Button settingsButton;
 	public Button exitButton;
+	//public AudioSource backgroundMusic;
 
 
 	// Use this for initialization
@@ -18,7 +19,9 @@ public class UIManager : MonoBehaviour {
 		highscoreButton = highscoreButton.GetComponent<Button> ();
 		settingsButton = settingsButton.GetComponent<Button> ();
 		exitButton = exitButton.GetComponent<Button> ();
-		// SceneManager.LoadScene ("MainMenu");
+		// backgroundMusic = GetComponent<AudioSource> ();
+		// backgroundMusic.Play ();
+		// DontDestroyOnLoad (backgroundMusic);
 
 	}
 	
