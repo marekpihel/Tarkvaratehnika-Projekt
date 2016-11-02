@@ -2,6 +2,8 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System;
+
 
 public class BlobController : MonoBehaviour
 {
@@ -9,9 +11,9 @@ public class BlobController : MonoBehaviour
     private float gridSize = 64f;
     private bool isMoving = false;
     private bool movementAllowedAfterExit = true;
-    private Vector2 input;                                //  Implement Attack animations
-    public int blobHealth = 3;                            //  Implement DMG taken
-    public int blobAttackDMG = 1;                         //  Implement DMG done
+    private Vector2 input;
+    public int blobHealth = 3;                      
+    public int blobAttackDMG = 1;                
     private Animator animator;
     private BoxCollider2D boxCollider2D;
     private int playerHealth;
@@ -26,6 +28,10 @@ public class BlobController : MonoBehaviour
 
     public void Update()
     {
+        if (isDead()) {
+            PlayerController.addPointsToCurrentScore(100);
+            Destroy(this);
+        }
         /*
         if (!isMoving)
         {
@@ -35,6 +41,14 @@ public class BlobController : MonoBehaviour
                 //StartCoroutine(move(transform));
         }
         */
+    }
+
+    private bool isDead()
+    {
+        if (blobHealth <= 0) {
+            return true;
+        }
+        return false;
     }
 
     /*

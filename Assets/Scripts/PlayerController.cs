@@ -3,6 +3,16 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/*
+Todo:
+
+Implement Attack animations
+Implement DMG taken
+Implement DMG done
+Implement Attack keybinds!
+Implement Score loading on Death!
+*/
+
 public class PlayerController : MonoBehaviour
 {
     private float moveSpeed = 128f;
@@ -12,13 +22,13 @@ public class PlayerController : MonoBehaviour
     private bool isAttacking = false;
     private bool movementAllowedAfterExit = true;
     private string playerDirection;
-    private Vector2 input;                                  //  Implement Attack animations
-    public int playerHealth = 50;                           //  Implement DMG taken
-    public int playerAttackDMG = 1;                         //  Implement DMG done
-    private string playerName;                              //  Implement Attack keybinds!
-    private double gameTimeElapsed;                         //  Implement Score loading on Death!
+    private Vector2 input;                                 
+    public int playerHealth = 50;                          
+    public int playerAttackDMG = 1;  
+    private string playerName;                             
+    private double gameTimeElapsed;                         
     private Text healthText;
-    private int currentScore;
+    public static int currentScore = 0;
     private Animator animator;
     private BoxCollider2D boxCollider2D;
 
@@ -120,7 +130,6 @@ public class PlayerController : MonoBehaviour
     private void levelEnd()
     {
         movementAllowedAfterExit = false;
-        currentScore = (int)(1 / (Mathf.Sqrt((float)gameTimeElapsed)) * 1000);
         Scoreboard.WriteScoreboard(SetName.getCharacterName(), currentScore);
         Invoke("loadHighScoreScene", waitOnLevelSwitch);
     }
@@ -179,5 +188,10 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetBool("isWalking", false);
         }
+    }
+
+    public static void addPointsToCurrentScore(int points)
+    {
+        currentScore += points;
     }
 }
