@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     private bool isMoving = false;
     private bool isAttacking = false;
     private bool movementAllowedAfterExit = true;
-    private string playerDirection;
+    private int playerDirection = 0;
     private Vector2 input;                                 
     public int playerHealth = 50;                          
     public int playerAttackDMG = 1;  
@@ -53,13 +53,20 @@ public class PlayerController : MonoBehaviour
     public void Update()
     {
         gameTimeElapsed = Mathf.Round((float)GameTime.getPlayedTime());
-        if (!isMoving)
+        if (!isMoving && !isAttacking)
         {
             input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));            // USE GetAxisRaw, edit animations to get same amount of frames, speak with Denis
             disableDiagonalMovement();
             decidePlayerDirection();
             if (input != Vector2.zero)
                 StartCoroutine(move(transform));
+        }
+        if (Input.GetButton("Fire1"))
+        {
+            print(playerDirection);
+            isAttacking = true;
+            animateChar();
+            isAttacking = false;
         }
         if (Input.GetButton("Jump"))
         {
@@ -77,7 +84,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator move(Transform transform)
     {
         isMoving = true;
-        animateCharMovement();
+        animateChar();
         Vector3 startPosition = transform.position;
         float time = 0;
         Vector3 endPosition = new Vector3(startPosition.x + System.Math.Sign(input.x) * gridSize, startPosition.y + System.Math.Sign(input.y) * gridSize, startPosition.z);
@@ -99,7 +106,7 @@ public class PlayerController : MonoBehaviour
         }
         if (movementAllowedAfterExit)
             isMoving = false;
-        animateCharMovement();
+        animateChar();
         yield return 0;
     }
 
@@ -152,15 +159,13 @@ public class PlayerController : MonoBehaviour
     private void decidePlayerDirection()
     {
         if (input.x == 1)
-            playerDirection = "East";
+            playerDirection = 2;
         else if (input.x == -1)
-            playerDirection = "West";
+            playerDirection = 4;
         else if (input.y == 1)
-            playerDirection = "North";
+            playerDirection = 1;
         else if (input.y == -1)
-            playerDirection = "South";
-        else
-            playerDirection = "Idle";
+            playerDirection = 3;
     }
 
 
@@ -171,24 +176,26 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    private void animateCharMovement()
+    private void animateChar()
     {
-        if (isMoving)
+        if (isMoving && !isAttacking)
         {
             animator.SetBool("isWalking", true);
             animator.SetFloat("input_x", input.x);
             animator.SetFloat("input_y", input.y);
         }
-        else if (isAttacking)
+        else if (!isMoving && isAttacking)
         {
             animator.SetBool("isWalking", false);
-            //Deniss to make pixle art about attack animations!
+            animator.SetTrigger("isAttacking");
+            animator.SetFloat("playerDirection", playerDirection);   
         }
         else
         {
             animator.SetBool("isWalking", false);
         }
     }
+
 
     public static void addPointsToCurrentScore(int points)
     {
