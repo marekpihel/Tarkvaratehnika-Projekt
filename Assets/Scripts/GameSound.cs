@@ -8,12 +8,13 @@ public class GameSound : MonoBehaviour {
 	void Awake() {
 		if (instance == null) {
 			instance = this; // set instance to this
-		} else if (instance != this) { // if instance already exists and it's not this:
+            DontDestroyOnLoad(gameObject);
+            backgroundMusic = GetComponent<AudioSource>();
+            backgroundMusic.Play();
+        } else if (instance != this) { // if instance already exists and it's not this:
 			Destroy (gameObject);
 		}
-		DontDestroyOnLoad (gameObject);
-		backgroundMusic = GetComponent<AudioSource> ();
-		backgroundMusic.Play ();
+		
 	}
 
 	// Use this for initialization
