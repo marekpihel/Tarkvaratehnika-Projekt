@@ -23,7 +23,7 @@ public class PlayerController : MonoBehaviour
     private bool movementAllowedAfterExit = true;
     private int playerDirection = 0;
     private Vector2 input;                                 
-    public int playerHealth = 50;                          
+    public static int playerHealth = 50;                          
     public int playerAttackDMG = 1;  
     private string playerName;                             
     private double gameTimeElapsed;                         
@@ -38,8 +38,6 @@ public class PlayerController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         boxCollider2D = GetComponent<BoxCollider2D>();
-        healthText = GameObject.Find("healthText").GetComponent<Text>();
-        playerName = SetName.getCharacterName();
         gameTimeElapsed = GameTime.getPlayedTime();
     }
 
@@ -66,25 +64,21 @@ public class PlayerController : MonoBehaviour
             }
             if (Input.GetButton("Fire1") && playerDirection != 0)
             {
-                print(playerDirection);
                 isAttacking = true;
                 animateChar();
                 isAttacking = false;
             }
             if (Input.GetButton("Jump"))
             {
-                print("Teleport");
                 this.transform.position = new Vector3(2944, -384, 0);
             }
             if (Input.GetButton("Cancel"))
             {
                 escMenu();
             }
-            updateUI();
         }
         else
         {
-            updateUI();
             levelEnd();
         }
     }
@@ -184,13 +178,6 @@ public class PlayerController : MonoBehaviour
             return false;
         else
             return true;
-    }
-
-
-    private void updateUI()
-    {
-        healthText.text = playerHealth.ToString();
-        GameObject.Find("nameText").GetComponent<Text>().text = playerName + " : " + gameTimeElapsed.ToString();
     }
 
 
