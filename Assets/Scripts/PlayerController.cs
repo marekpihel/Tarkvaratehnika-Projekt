@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
     public static int currentScore = 0;
     private Animator animator;
     private BoxCollider2D boxCollider2D;
+    private bool isAlive = true;
 
 
     public void Start()
@@ -52,32 +53,40 @@ public class PlayerController : MonoBehaviour
 
     public void Update()
     {
-        gameTimeElapsed = Mathf.Round((float)GameTime.getPlayedTime());
-        if (!isMoving && !isAttacking)
+        if (checkAliveState())
         {
-            input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));            // USE GetAxisRaw, edit animations to get same amount of frames, speak with Denis
-            disableDiagonalMovement();
-            decidePlayerDirection();
-            if (input != Vector2.zero)
-                StartCoroutine(move(transform));
+            gameTimeElapsed = Mathf.Round((float)GameTime.getPlayedTime());
+            if (!isMoving && !isAttacking)
+            {
+                input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));            // USE GetAxisRaw, edit animations to get same amount of frames, speak with Denis
+                disableDiagonalMovement();
+                decidePlayerDirection();
+                if (input != Vector2.zero)
+                    StartCoroutine(move(transform));
+            }
+            if (Input.GetButton("Fire1") && playerDirection != 0)
+            {
+                print(playerDirection);
+                isAttacking = true;
+                animateChar();
+                isAttacking = false;
+            }
+            if (Input.GetButton("Jump"))
+            {
+                print("Teleport");
+                this.transform.position = new Vector3(2944, -384, 0);
+            }
+            if (Input.GetButton("Cancel"))
+            {
+                escMenu();
+            }
+            updateUI();
         }
-        if (Input.GetButton("Fire1"))
+        else
         {
-            print(playerDirection);
-            isAttacking = true;
-            animateChar();
-            isAttacking = false;
+            updateUI();
+            levelEnd();
         }
-        if (Input.GetButton("Jump"))
-        {
-            print("Teleport");
-            this.transform.position = new Vector3(2944, -384, 0);
-        }
-        if (Input.GetButton("Cancel"))
-        {
-            escMenu();
-        }
-        updateUI();
     }
 
 
@@ -166,6 +175,15 @@ public class PlayerController : MonoBehaviour
             playerDirection = 1;
         else if (input.y == -1)
             playerDirection = 3;
+    }
+
+
+    private bool checkAliveState()
+    {
+        if (playerHealth <= 0)
+            return false;
+        else
+            return true;
     }
 
 
