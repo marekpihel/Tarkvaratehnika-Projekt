@@ -16,6 +16,12 @@ public class SetName : MonoBehaviour {
 		alertText = GameObject.Find ("AlertText").GetComponent<Text> ();
 		placeholderText = GameObject.Find ("Placeholder").GetComponent<Text> ();
 	}
+
+	void Update () {
+		if (Input.GetButton("Cancel")) {
+			backToMainMenu();
+		}
+	}
 	
 	public void setCharacterName(string inputFieldString) {
 		input = inputFieldString;
