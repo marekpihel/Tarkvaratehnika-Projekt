@@ -72,10 +72,6 @@ public class PlayerController : MonoBehaviour
             {
                 this.transform.position = new Vector3(2944, -384, 0);
             }
-            if (Input.GetButton("Cancel"))
-            {
-                escMenu();
-            }
         }
         else
         {
@@ -115,26 +111,17 @@ public class PlayerController : MonoBehaviour
 
 
     private bool isAllowedToMove(RaycastHit2D hit)
-    {
-        if (hit.collider == null)
-            return true;
-        else if (hit.collider.tag == "Exit")
-            return true;
-        else if (hit.collider.tag == "Enemy")
-        {
-            //Implement collision with enemy, DMG taken and done.
-            return false;
-        }
-        else
-            return false;
-    }
-
-
-    private void escMenu()
-    {
-        SceneManager.LoadScene("MainMenu");
-        // Implement for Ceisi to make ingame pause maneu.
-    }
+	{
+		if (hit.collider == null)
+			return true;
+		else if (hit.collider.tag == "Exit")
+			return true;
+		else if (hit.collider.tag == "Enemy") {
+			//Implement collision with enemy, DMG taken and done.
+			return false;
+		} else
+			return false;
+	}
 
 
     private void levelEnd()
