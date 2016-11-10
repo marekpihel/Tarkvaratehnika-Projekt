@@ -127,7 +127,7 @@ public class PlayerController : MonoBehaviour
     private void levelEnd()
     {
         movementAllowedAfterExit = false;
-        Scoreboard.WriteScoreboard(SetName.getCharacterName(), currentScore);
+        Scoreboard.writeToScoreboard(SetName.getCharacterName(), currentScore);
         Invoke("loadHighScoreScene", waitOnLevelSwitch);
     }
 

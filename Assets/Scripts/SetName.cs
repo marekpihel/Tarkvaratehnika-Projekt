@@ -21,7 +21,12 @@ public class SetName : MonoBehaviour {
 		if (Input.GetButton("Cancel")) {
 			backToMainMenu();
 		}
-	}
+        // Remove if no like----------------
+        if (Input.GetButton("Submit")) {
+            confirmCharacterName();
+        }
+        //-------------------------------------
+    }
 	
 	public void setCharacterName(string inputFieldString) {
 		input = inputFieldString;

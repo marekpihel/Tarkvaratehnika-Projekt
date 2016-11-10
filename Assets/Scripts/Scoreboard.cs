@@ -6,45 +6,45 @@ using System.Linq;
 
 public class Scoreboard : MonoBehaviour {
  
-    public static List<KeyValuePair<string, int>> WriteScoreboard(String name, int score) {
-        var listForWrite = ReadScoreboard();
+    public static List<KeyValuePair<string, int>> writeToScoreboard(String playerName, int playerScore) {
+        var scoreList = readFromScoreboard();
+        var currentPair = new KeyValuePair<string, int>(playerName, playerScore);
 
-        KeyValuePair<string, int> currentPair = new KeyValuePair<string, int>(name, score);
-        listForWrite.Add(currentPair);
-        
+        scoreList.Add(currentPair);
+        scoreList = orderByValue(scoreList);
 
-
-        listForWrite = OrderByValue(listForWrite);
-        
-
-
-        File.WriteAllLines(@".\scoreboard.txt", listForWrite.Select(value => value.ToString()).ToArray());
-        return listForWrite;
+        File.WriteAllLines(@".\scoreboard.txt", scoreList.Select(value => value.ToString()).ToArray());
+        return scoreList;
     }
 
-    public static List<KeyValuePair<string, int>> OrderByValue(List<KeyValuePair<string, int>> listToOrder) {
-        for (int i = 0; i < listToOrder.Count; i++) {
-            listToOrder.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
-        }
-        listToOrder.Reverse();
-        return listToOrder;
-    }
-
-
-    public static List<KeyValuePair<string, int>> ReadScoreboard() {
-        var listForRead = new List<KeyValuePair<string, int>>();
+    public static List<KeyValuePair<string, int>> readFromScoreboard() {
+        var scoreList = new List<KeyValuePair<string, int>>();
         if (File.Exists("scoreboard.txt")) {
-            string[] lines = File.ReadAllLines(@".\scoreboard.txt");
-
-            for (int i = 0; i < lines.Length; i++) {
-                string cleanValue = lines[i].Replace("[", "").Replace("]", "");
-                string[] line = cleanValue.Split(',');
-                string valString = line[0];
-                int valInt = Int32.Parse(line[1]);
-                listForRead.Add(new KeyValuePair<string, int>(valString, valInt));
-            }
-            listForRead = OrderByValue(listForRead);
+            scoreList = parseFileToList();
+            scoreList = orderByValue(scoreList);
         }
-        return listForRead;
+        return scoreList;
+    }
+
+
+    private static List<KeyValuePair<string, int>> parseFileToList() {
+        var temporaryList = new List<KeyValuePair<string, int>>();
+        string[] lines = File.ReadAllLines(@".\scoreboard.txt");
+        for (int i = 0; i < lines.Length; i++) {
+            string cleanString = lines[i].Replace("[", "").Replace("]", "");
+            string[] line = cleanString.Split(',');
+            string playerName = line[0];
+            int playerScore = Int32.Parse(line[1]);
+            temporaryList.Add(new KeyValuePair<string, int>(playerName, playerScore));
+        }
+        return temporaryList;
+    }
+
+    public static List<KeyValuePair<string, int>> orderByValue(List<KeyValuePair<string, int>> scoreList) {
+        for (int i = 0; i < scoreList.Count; i++) {
+            scoreList.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+        }
+        scoreList.Reverse();
+        return scoreList;
     }
 }

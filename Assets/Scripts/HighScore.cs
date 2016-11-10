@@ -6,22 +6,22 @@ using System.Collections.Generic;
 using System;
 
 public class HighScore : MonoBehaviour {
-    Text name1;
-    Text score1;
-    Text scoreBoardNumbering1;
+    Text playerName;
+    Text playerScore;
+    Text scoreBoardNumbering;
     int counter = 0;
 
     // Use this for initialization
     void Start () {
-        name1 = GameObject.Find("textName").GetComponent<Text>();
-        score1 = GameObject.Find("textScore").GetComponent<Text>();
-        scoreBoardNumbering1 = GameObject.Find("scoreboardNumbering").GetComponent<Text>();
+        playerName = GameObject.Find("textName").GetComponent<Text>();
+        playerScore = GameObject.Find("textScore").GetComponent<Text>();
+        scoreBoardNumbering = GameObject.Find("scoreboardNumbering").GetComponent<Text>();
 
-        foreach (KeyValuePair<string, int> entry in Scoreboard.ReadScoreboard()) {
+        foreach (KeyValuePair<string, int> entry in Scoreboard.readFromScoreboard()) {
             if (counter < 10) {
-                scoreBoardNumbering1.text += (counter +1) + ". \n";
-                name1.text += entry.Key + " \n";
-                score1.text += Convert.ToString(entry.Value) + " \n";
+                scoreBoardNumbering.text += (counter + 1) + ". \n";
+                playerName.text += entry.Key + " \n";
+                playerScore.text += Convert.ToString(entry.Value) + " \n";
                 counter++;
             }
         }
