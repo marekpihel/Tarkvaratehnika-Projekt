@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class GameSound : MonoBehaviour {
+
+	public float masterVolume;
 	public static GameSound instance = null;
 	private AudioSource backgroundMusic;
 
@@ -14,7 +16,14 @@ public class GameSound : MonoBehaviour {
         } else if (instance != this) { // if instance already exists and it's not this:
 			Destroy (gameObject);
 		}
-		
+	}
+
+	public static GameSound GetInstance() {
+		return instance;
+	}
+
+	public void updateBackgroundVolume() {
+		backgroundMusic.volume = masterVolume;
 	}
 
 	// Use this for initialization

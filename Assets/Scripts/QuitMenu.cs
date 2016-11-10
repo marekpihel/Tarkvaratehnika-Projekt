@@ -18,7 +18,9 @@ public class QuitMenu : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (Input.GetButton("Cancel")) {
+			ExitNoPress();
+		}
 	}
 
 	// exitMenu -> No

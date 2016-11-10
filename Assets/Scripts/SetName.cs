@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Text.RegularExpressions;
 
 public class SetName : MonoBehaviour {
 
@@ -15,6 +16,12 @@ public class SetName : MonoBehaviour {
 		alertText = GameObject.Find ("AlertText").GetComponent<Text> ();
 		placeholderText = GameObject.Find ("Placeholder").GetComponent<Text> ();
 	}
+
+	void Update () {
+		if (Input.GetButton("Cancel")) {
+			backToMainMenu();
+		}
+	}
 	
 	public void setCharacterName(string inputFieldString) {
 		input = inputFieldString;
@@ -23,6 +30,8 @@ public class SetName : MonoBehaviour {
 	public void confirmCharacterName() {
 		if (placeholderText.enabled == true) {
 			alertText.text = "Please enter your character name!";
+		} else if (!Regex.IsMatch(input, "^[a-zA-Z0-9]*$", RegexOptions.IgnoreCase)) {
+			alertText.text = "Only alphanumeric characters allowed!";
 		} else if (input.Length > 20) {
 			alertText.text = "Name cannot be longer than 20 characters!";
 		} else {

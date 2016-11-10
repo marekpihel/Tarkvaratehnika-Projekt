@@ -29,7 +29,9 @@ public class HighScore : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (Input.GetButton("Cancel")) {
+			backToMainMenu();
+		}
 	}
 
 	public void backToMainMenu() {

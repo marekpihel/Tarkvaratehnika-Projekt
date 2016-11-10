@@ -15,10 +15,16 @@ public class Settings : MonoBehaviour {
         if (Input.GetButton("Cancel")) {
             backToMainMenu();
         }
-	
 	}
-
-	// TO-DO VOLUME MANIMUPLATION
+		
+	public void changeVolume() {
+		GameSound gameSound = GameSound.GetInstance();
+		float updatedVolume = GUILayout.HorizontalSlider (gameSound.masterVolume, 0.0f, 0.1f);
+		if (updatedVolume != gameSound.masterVolume) { // the volume have changed
+			gameSound.masterVolume = updatedVolume;
+			gameSound.updateBackgroundVolume ();
+		}
+	}
 
 	// TO-DO RESOLUTION MANIPULATION
 
