@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 public class InGameUI : MonoBehaviour {
     private int playerHealth;
@@ -9,6 +10,7 @@ public class InGameUI : MonoBehaviour {
     private string playerName;
     private string playerTime;
 	public GameObject ingameQuitMenu;
+    private bool isPaused;
 
     // Use this for initialization
     void Start () {
@@ -16,6 +18,7 @@ public class InGameUI : MonoBehaviour {
         playerHealth = PlayerController.playerHealth;
         healthText = GameObject.Find("healthText").GetComponent<UnityEngine.UI.Text>();
         playerName = SetName.getCharacterName();
+        isPaused = false;
     }
 	
 	// Update is called once per frame
@@ -25,13 +28,25 @@ public class InGameUI : MonoBehaviour {
 
         GameObject.Find("timeText").GetComponent<Text>().text = Mathf.Round((float)GameTime.getPlayedTime())   + " s" ;
 
-		if (Input.GetButton("Cancel")) {
-			ingameQuitMenu.SetActive (true);
-			Time.timeScale = 0;
+		if (Input.GetButtonDown("Cancel")) {
+            if (!isPaused)
+            {
+                pauseGame();
+            }
+            else {
+                resumeGame();
+            }
+            isPaused = !isPaused;
 		}
     }
 
-	public void resumeGame() {
+    private void pauseGame()
+    {
+        ingameQuitMenu.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void resumeGame() { 
 		ingameQuitMenu.SetActive (false);
 		Time.timeScale = 1;
 	}
