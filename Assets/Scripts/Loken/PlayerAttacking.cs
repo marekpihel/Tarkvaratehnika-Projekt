@@ -26,14 +26,14 @@ public class PlayerAttacking : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isAlive())
+        if (isAlive() && !InGameUI.isPaused)
         {
             if (!isAttacking)
             {
                 playerDirection = animator.GetFloat("direction");
                 if (Input.GetButtonDown("Fire1") && playerDirection != 0)
                 {
-                    input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+                    input = convertDirectionToVector();
                     startPosition = transform.position;
                     boxCollider2D.enabled = false;
                     RaycastHit2D hit = Physics2D.Raycast(startPosition, input, gridSize);
@@ -86,6 +86,20 @@ public class PlayerAttacking : MonoBehaviour
         }
         else
             return false;
+    }
+
+    private Vector2 convertDirectionToVector()
+    {
+        if (playerDirection == 1)
+            return new Vector2(0, 1);
+        else if (playerDirection == 2)
+            return new Vector2(1, 0);
+        else if (playerDirection == 3)
+            return new Vector2(0, -1);
+        else if (playerDirection == 4)
+            return new Vector2(-1, 0);
+        else
+            return new Vector2();
     }
 
     private bool isAlive()

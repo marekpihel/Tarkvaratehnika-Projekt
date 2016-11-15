@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if (PlayerAttacking.aliveState)
+        if (PlayerAttacking.aliveState && !InGameUI.isPaused)
         {
             if (!isMoving)
             {

@@ -29,7 +29,7 @@ public class BlobController : MonoBehaviour
     {
         if (isDead()) {
             PlayerAttacking.addPointsToCurrentScore(100);
-            Destroy(this);
+            Destroy(this.gameObject);
         }
         else
         {
