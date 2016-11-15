@@ -89,16 +89,16 @@ public class PlayerAttacking : MonoBehaviour
 
     private Vector2 convertDirectionToVector()
     {
+        Vector2 vector = new Vector2();
         if (playerDirection == 1)
-            return new Vector2(0, 1);
+            vector = new Vector2(0, 1);
         else if (playerDirection == 2)
-            return new Vector2(1, 0);
+            vector = new Vector2(1, 0);
         else if (playerDirection == 3)
-            return new Vector2(0, -1);
+            vector =  new Vector2(0, -1);
         else if (playerDirection == 4)
-            return new Vector2(-1, 0);
-        else
-            return new Vector2();
+            vector = new Vector2(-1, 0);
+        return vector;
     }
 
     private void isAlive()

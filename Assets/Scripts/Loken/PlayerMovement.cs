@@ -25,13 +25,16 @@ public class PlayerMovement : MonoBehaviour {
     {
         if (PlayerAttacking.aliveState && !inGameUi.getIsPaused())
         {
-            input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-            disableDiagonalMovement();
-            if (input != Vector2.zero)
-                StartCoroutine(move(transform));
+            if (!isMoving)
+            {
+                input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));            // USE GetAxisRaw, edit animations to get same amount of frames, speak with Denis
+                disableDiagonalMovement();
+                if (input != Vector2.zero)
+                    StartCoroutine(move(transform));
+            }
+            if (Input.GetButton("Jump"))
+                this.transform.position = new Vector3(2944, -384, 0);
         }
-        if (Input.GetButton("Jump"))
-            this.transform.position = new Vector3(2944, -384, 0);
         else
             levelEnd();
     }
