@@ -15,6 +15,7 @@ public class BlobController : MonoBehaviour
     public int blobAttackDMG = 1;                
     private Animator animator;
     private BoxCollider2D boxCollider2D;
+    private int playerHealth;
 
 
     public void Start()
@@ -50,7 +51,6 @@ public class BlobController : MonoBehaviour
             return true;
         else if (hit.collider.tag == "Player")
         {
-            PlayerAttacking.playerHealth -= blobAttackDMG;
             //Implement collision with Player, DMG taken and done.
             return false;
         }

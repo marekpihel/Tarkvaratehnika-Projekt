@@ -8,10 +8,9 @@ public class PlayerAttacking : MonoBehaviour {
     private BoxCollider2D boxCollider2D;
     private bool isAttacking = false;
     private float playerDirection = 0;
-    private Vector2 input;
+    private Vector2 playerDirectionInVector2;
     private Vector3 startPosition;
     public static int playerHealth = 9;
-    public static int playerDMG = 1;
     public static int currentScore = 0;
     public static bool aliveState = true;
     
@@ -30,33 +29,27 @@ public class PlayerAttacking : MonoBehaviour {
                 playerDirection = animator.GetFloat("direction");
                 if (Input.GetButtonDown("Fire1") && playerDirection != 0)
                 {
-                    input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
                     startPosition = transform.position;
+                    playerDirectionInVector2 = convertDirectionIntoVector2();
                     boxCollider2D.enabled = false;
-                    RaycastHit2D hit = Physics2D.Raycast(startPosition, input, gridSize);
+                    RaycastHit2D hit = Physics2D.Raycast(startPosition, playerDirectionInVector2, gridSize);
                     if (isWithinHittingRange(hit))
                     {
-                        transform.position = new Vector3(startPosition.x + System.Math.Sign(input.x) * gridSize, startPosition.y + System.Math.Sign(input.y) * gridSize, startPosition.z);
-                        Invoke("returnToOriginalPlace", slashTeleBackWaitTime);
-                        isAttacking = true;
-                        animateChar();
+                        transform.position = new Vector3(startPosition.x + System.Math.Sign(playerDirectionInVector2.x) * gridSize, startPosition.y + System.Math.Sign(playerDirectionInVector2.y) * gridSize, startPosition.z);
+                        Invoke("returnToOrigialPlace", slashTeleBackWaitTime);
                     }
-                    else
-                    {
-                        isAttacking = true;
-                        Invoke("returnToOriginalPlace", slashTeleBackWaitTime);
-                        animateChar();
-                    }
+                    isAttacking = true;
+                    animateChar();
                 }
             }
         }
         else
         {
-            //Calls levelEnd function in PlayerMovement  
+            //Calls level end function in PlayerMovement  
         }
     }
 
-    private void returnToOriginalPlace()
+    private void returnToOrigialPlace()
     {
         transform.position = startPosition;
         boxCollider2D.enabled = true;
@@ -66,13 +59,12 @@ public class PlayerAttacking : MonoBehaviour {
     private bool isWithinHittingRange(RaycastHit2D hit)
     {
         if (hit.collider == null)
+        {
             return false;
+        }
         else if (hit.collider.tag == "Enemy")
         {
-            Debug.Log("Attacks Enemy");
-            BlobController blob = hit.collider.gameObject.GetComponent<BlobController>();
-            blob.blobHealth -= playerDMG;
-            Debug.Log(blob.blobHealth);
+            print("Can Attack");
             return true;
         }
         else
@@ -104,5 +96,19 @@ public class PlayerAttacking : MonoBehaviour {
     public static void addPointsToCurrentScore(int points)
     {
         currentScore += points;
+    }
+
+    private Vector2 convertDirectionIntoVector2()
+    {
+        if (playerDirection == 1)
+            return new Vector2(0, 1);
+        else if (playerDirection == 2)
+            return new Vector2(1, 0);
+        else if (playerDirection == 3)
+            return new Vector2(0, -1);
+        else if (playerDirection == 4)
+            return new Vector2(-1, 0);
+        else
+            return new Vector2(0, 0);
     }
 }

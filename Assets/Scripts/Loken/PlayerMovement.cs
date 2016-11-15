@@ -87,7 +87,7 @@ public class PlayerMovement : MonoBehaviour {
         else if (hit.collider.tag == "Enemy")
         {
             //Implement collision with enemy, DMG taken and done.
-            Debug.Log("Walked into Enemy");
+            print("HitEnemy");
             return false;
         }
         else
