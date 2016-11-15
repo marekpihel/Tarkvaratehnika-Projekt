@@ -6,11 +6,11 @@ using UnityEngine.UI;
 /*
 Todo:
 
+    REFACTOR
+
 Implement Attack animations
 Implement DMG taken
 Implement DMG done
-Implement Attack keybinds!
-Implement Score loading on Death!
 */
 
 public class PlayerController : MonoBehaviour
