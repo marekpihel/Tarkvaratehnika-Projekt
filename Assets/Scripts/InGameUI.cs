@@ -43,6 +43,10 @@ public class InGameUI : MonoBehaviour {
         Time.timeScale = 0;
     }
 
+    public Boolean getIsPaused() {
+        return isPaused;
+    }
+
     public void resumeGame() { 
 		ingameQuitMenu.SetActive (false);
 		Time.timeScale = 1;

@@ -15,18 +15,20 @@ public class PlayerAttacking : MonoBehaviour
     public static int playerDMG = 1;
     public static int currentScore = 0;
     public static bool aliveState = true;
+    private InGameUI inGameUi;
 
 
     void Start()
     {
         animator = GetComponent<Animator>();
         boxCollider2D = GetComponent<BoxCollider2D>();
+        inGameUi = GameObject.Find("Map").GetComponent<InGameUI>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (aliveState && !isAttacking)
+        if (aliveState && !isAttacking && !inGameUi.getIsPaused())
         {
              playerDirection = animator.GetFloat("direction");
              if (Input.GetButtonDown("Fire1") && playerDirection != 0)

@@ -12,16 +12,18 @@ public class PlayerMovement : MonoBehaviour {
     private bool isMoving = false;
     private bool movementAllowedAfterExit = true;
     private float playerDirection = 0;
+    private InGameUI inGameUi;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         boxCollider2D = GetComponent<BoxCollider2D>();
+        inGameUi = GameObject.Find("Map").GetComponent<InGameUI>();
     }
 
     void Update()
     {
-        if (PlayerAttacking.aliveState && !isMoving)
+        if (PlayerAttacking.aliveState && !inGameUi.getIsPaused())
         {
             input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
             disableDiagonalMovement();
