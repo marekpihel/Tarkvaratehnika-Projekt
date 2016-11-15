@@ -10,7 +10,6 @@ public class BlobController : MonoBehaviour
     private float moveSpeed = 128f;
     private float gridSize = 64f;
     private bool isMoving = false;
-    private bool movementAllowedAfterExit = true;
     private Vector2 input;
     public int blobHealth = 3;                      
     public int blobAttackDMG = 1;                
@@ -29,8 +28,12 @@ public class BlobController : MonoBehaviour
     public void Update()
     {
         if (isDead()) {
-            PlayerController.addPointsToCurrentScore(100);
+            PlayerAttacking.addPointsToCurrentScore(100);
             Destroy(this);
+        }
+        else
+        {
+
         }
         /*
         if (!isMoving)
@@ -113,10 +116,6 @@ public class BlobController : MonoBehaviour
             animator.SetBool("isWalking", true);
             animator.SetFloat("input_x", input.x);
             animator.SetFloat("input_y", input.y);
-        }
-        else if (false)
-        {
-            //Deniss to make pixle art about attack animations!
         }
         else
         {

@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
-public class PlayerMovement : MonoBehaviour
-{
+public class PlayerMovement : MonoBehaviour {
     private float moveSpeed = 128f;
     private float gridSize = 64f;
+    private float waitOnLevelSwitch = 0.5f;
     private Animator animator;
     private BoxCollider2D boxCollider2D;
-    private bool isAlive = true;
     private Vector2 input;
     private bool isMoving = false;
     private bool movementAllowedAfterExit = true;
@@ -24,19 +24,26 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isMoving)
+        if (PlayerAttacking.aliveState)
         {
-            input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));            // USE GetAxisRaw, edit animations to get same amount of frames, speak with Denis
-            disableDiagonalMovement();
-            if (input != Vector2.zero)
-                StartCoroutine(move(transform));
+            if (!isMoving)
+            {
+                input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));            // USE GetAxisRaw, edit animations to get same amount of frames, speak with Denis
+                disableDiagonalMovement();
+                if (input != Vector2.zero)
+                    StartCoroutine(move(transform));
+            }
+
+            //FOR DEMOING PURPOSE
+
+            if (Input.GetButton("Jump"))
+            {
+                this.transform.position = new Vector3(2944, -384, 0);
+            }
         }
-
-        //FOR DEMOING PURPOSE
-
-        if (Input.GetButton("Jump"))
+        else
         {
-            this.transform.position = new Vector3(2944, -384, 0);
+            levelEnd();
         }
     }
 
@@ -103,5 +110,24 @@ public class PlayerMovement : MonoBehaviour
         {
             animator.SetBool("isWalking", false);
         }
+    }
+
+    public void OnTriggerEnter2D(Collider2D collisionObject)
+    {
+        if (collisionObject.name == "trapdoor")
+            levelEnd();
+    }
+
+    public void levelEnd()
+    {
+        movementAllowedAfterExit = false;
+        Scoreboard.writeToScoreboard(SetName.getCharacterName(), PlayerAttacking.currentScore);
+        Invoke("loadHighScoreScene", waitOnLevelSwitch);
+    }
+
+    public void loadHighScoreScene()
+    {
+        Destroy(this.gameObject);
+        SceneManager.LoadScene("Highscore");
     }
 }
