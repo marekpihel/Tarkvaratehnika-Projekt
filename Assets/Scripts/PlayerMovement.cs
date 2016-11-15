@@ -31,7 +31,15 @@ public class PlayerMovement : MonoBehaviour
             if (input != Vector2.zero)
                 StartCoroutine(move(transform));
         }
+
+        //FOR DEMOING PURPOSE
+
+        if (Input.GetButton("Jump"))
+        {
+            this.transform.position = new Vector3(2944, -384, 0);
+        }
     }
+
     private IEnumerator move(Transform transform)
     {
         isMoving = true;
