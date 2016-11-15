@@ -82,8 +82,4 @@ public class PlayerAttacking : MonoBehaviour {
     {
         currentScore += points;
     }
-
-    public int getHealth() {
-        return playerHealth;
-    }
 }
