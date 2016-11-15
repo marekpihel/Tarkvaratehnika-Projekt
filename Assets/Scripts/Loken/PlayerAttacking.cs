@@ -26,32 +26,29 @@ public class PlayerAttacking : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isAlive() && !InGameUI.isPaused)
+        if (aliveState && !isAttacking)
         {
-            if (!isAttacking)
-            {
-                playerDirection = animator.GetFloat("direction");
-                if (Input.GetButtonDown("Fire1") && playerDirection != 0)
-                {
-                    input = convertDirectionToVector();
-                    startPosition = transform.position;
-                    boxCollider2D.enabled = false;
-                    RaycastHit2D hit = Physics2D.Raycast(startPosition, input, gridSize);
-                    if (isWithinHittingRange(hit))
-                    {
-                        transform.position = new Vector3(startPosition.x + System.Math.Sign(input.x) * gridSize, startPosition.y + System.Math.Sign(input.y) * gridSize, startPosition.z);
-                        Invoke("returnToOriginalPlace", slashTeleBackWaitTime);
-                        isAttacking = true;
-                        animateChar();
-                    }
-                    else
-                    {
-                        Invoke("setIsAttackFalse", slashTeleBackWaitTime);
-                        isAttacking = true;
-                        animateChar();
-                    }
-                }
-            }
+             playerDirection = animator.GetFloat("direction");
+             if (Input.GetButtonDown("Fire1") && playerDirection != 0)
+             {
+                 input = convertDirectionToVector();
+                 startPosition = transform.position;
+                 boxCollider2D.enabled = false;
+                 RaycastHit2D hit = Physics2D.Raycast(startPosition, input, gridSize);
+                 if (isWithinHittingRange(hit))
+                 {
+                     transform.position = new Vector3(startPosition.x + System.Math.Sign(input.x) * gridSize, startPosition.y + System.Math.Sign(input.y) * gridSize, startPosition.z);
+                     Invoke("returnToOriginalPlace", slashTeleBackWaitTime);
+                     isAttacking = true;
+                     animateChar();
+                 }
+                 else
+                 {
+                     Invoke("setIsAttackFalse", slashTeleBackWaitTime);
+                     isAttacking = true;
+                     animateChar();
+                 }
+             }
         }
         else
         {
@@ -102,18 +99,12 @@ public class PlayerAttacking : MonoBehaviour
             return new Vector2();
     }
 
-    private bool isAlive()
+    private void isAlive()
     {
         if (playerHealth <= 0)
-        {
             aliveState = false;
-            return false;
-        }
         else
-        {
             aliveState = true;
-            return true;
-        }
     }
 
     private void animateChar()

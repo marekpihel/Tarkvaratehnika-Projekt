@@ -9,7 +9,7 @@ public class InGameUI : MonoBehaviour {
     private string playerName;
     private string playerTime;
 	public GameObject ingameQuitMenu;
-    public static bool isPaused;
+    private bool isPaused;
 
     // Use this for initialization
     void Start () {

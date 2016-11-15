@@ -13,39 +13,25 @@ public class PlayerMovement : MonoBehaviour {
     private bool movementAllowedAfterExit = true;
     private float playerDirection = 0;
 
-
-
-    // Use this for initialization
     void Start()
     {
         animator = GetComponent<Animator>();
         boxCollider2D = GetComponent<BoxCollider2D>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (PlayerAttacking.aliveState && !InGameUI.isPaused)
+        if (PlayerAttacking.aliveState && !isMoving)
         {
-            if (!isMoving)
-            {
-                input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));            // USE GetAxisRaw, edit animations to get same amount of frames, speak with Denis
-                disableDiagonalMovement();
-                if (input != Vector2.zero)
-                    StartCoroutine(move(transform));
-            }
-
-            //FOR DEMOING PURPOSE
-
-            if (Input.GetButton("Jump"))
-            {
-                this.transform.position = new Vector3(2944, -384, 0);
-            }
+            input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+            disableDiagonalMovement();
+            if (input != Vector2.zero)
+                StartCoroutine(move(transform));
         }
+        if (Input.GetButton("Jump"))
+            this.transform.position = new Vector3(2944, -384, 0);
         else
-        {
             levelEnd();
-        }
     }
 
     private IEnumerator move(Transform transform)
@@ -86,8 +72,7 @@ public class PlayerMovement : MonoBehaviour {
             return true;
         else if (hit.collider.tag == "Enemy")
         {
-            //Implement collision with enemy, DMG taken and done.
-            print("HitEnemy");
+            Debug.Log("Walking Into Enemy");
             return false;
         }
         else
@@ -124,9 +109,7 @@ public class PlayerMovement : MonoBehaviour {
             animator.SetFloat("input_y", input.y);
         }
         else
-        {
             animator.SetBool("isWalking", false);
-        }
     }
 
     public void OnTriggerEnter2D(Collider2D collisionObject)
