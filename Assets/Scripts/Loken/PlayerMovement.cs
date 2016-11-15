@@ -4,13 +4,14 @@ using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour {
     private float moveSpeed = 128f;
-    private float gridSize = 64f;
+    public static float gridSize = 64f;
     private float waitOnLevelSwitch = 0.5f;
     private Animator animator;
     private BoxCollider2D boxCollider2D;
     private Vector2 input;
     private bool isMoving = false;
     private bool movementAllowedAfterExit = true;
+    private float playerDirection = 0;
 
 
 
@@ -65,6 +66,7 @@ public class PlayerMovement : MonoBehaviour {
                 transform.position = Vector3.Lerp(startPosition, endPosition, time);
                 yield return null;
             }
+            transform.position = endPosition;
         }
         else
         {
@@ -85,6 +87,7 @@ public class PlayerMovement : MonoBehaviour {
         else if (hit.collider.tag == "Enemy")
         {
             //Implement collision with enemy, DMG taken and done.
+            print("HitEnemy");
             return false;
         }
         else
@@ -96,6 +99,20 @@ public class PlayerMovement : MonoBehaviour {
             input.y = 0;
         else
             input.x = 0;
+        decidePlayerDirection();
+    }
+
+    private void decidePlayerDirection()
+    {
+        if (input.x == 1)
+            playerDirection = 2;
+        else if (input.x == -1)
+            playerDirection = 4;
+        else if (input.y == 1)
+            playerDirection = 1;
+        else if (input.y == -1)
+            playerDirection = 3;
+        animator.SetFloat("direction", playerDirection);
     }
 
     private void animateChar()

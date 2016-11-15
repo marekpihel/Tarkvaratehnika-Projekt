@@ -35,15 +35,6 @@ public class BlobController : MonoBehaviour
         {
 
         }
-        /*
-        if (!isMoving)
-        {
-            input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));            // Input.GetAxisRaw Võib olla parem, kuid siis peab vaatama animatsioone
-            disableDiagonalMovement();
-            if (input != Vector2.zero)
-                //StartCoroutine(move(transform));
-        }
-        */
     }
 
     private bool isDead()
@@ -53,38 +44,6 @@ public class BlobController : MonoBehaviour
         }
         return false;
     }
-
-    /*
-    private IEnumerator move(Transform transform)
-    {
-        isMoving = true;
-        animateCharMovement();
-        Vector3 startPosition = transform.position;
-        float time = 0;
-        Vector3 endPosition = new Vector3(startPosition.x + System.Math.Sign(input.x) * gridSize, startPosition.y + System.Math.Sign(input.y) * gridSize, startPosition.z);
-        boxCollider2D.enabled = false;
-        RaycastHit2D hit = Physics2D.Raycast(startPosition, input, gridSize);
-        if (isAllowedToMove(hit))
-        {
-            boxCollider2D.enabled = true;
-            while (time < 1f)
-            {
-                time += Time.deltaTime * (moveSpeed / gridSize);
-                transform.position = Vector3.Lerp(startPosition, endPosition, time);
-                yield return null;
-            }
-        }
-        else
-        {
-            //TO DO SOMETHING WHEN HITS THE WALL
-        }
-        if (movementAllowedAfterExit)
-            isMoving = false;
-        animateCharMovement();
-        yield return 0;
-    }
-    */
-
 
     private bool isAllowedToMove(RaycastHit2D hit)
     {
@@ -97,15 +56,6 @@ public class BlobController : MonoBehaviour
         }
         else
             return false;
-    }
-
-
-    private void disableDiagonalMovement()
-    {
-        if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
-            input.y = 0;
-        else
-            input.x = 0;
     }
 
 

@@ -11,9 +11,9 @@ public class QuitMenu : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		// canvas = GameObject.GetComponent<Canvas> ();
-		// yes = GameObject.Find ("Yes").GetComponent<Button> ();
-		// no = GameObject.Find ("No").GetComponent<Button> ();
+		//canvas = GameObject.GetComponent<Canvas> ();
+		yes = GameObject.Find ("Yes").GetComponent<Button> ();
+		no = GameObject.Find ("No").GetComponent<Button> ();
 	}
 	
 	// Update is called once per frame

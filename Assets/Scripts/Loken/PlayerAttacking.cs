@@ -2,12 +2,14 @@
 using System.Collections;
 
 public class PlayerAttacking : MonoBehaviour {
-    private float rayCastRange = 64f;
+    private float gridSize = PlayerMovement.gridSize;
+    private float slashTeleBackWaitTime = 0.45f;
     private Animator animator;
     private BoxCollider2D boxCollider2D;
     private bool isAttacking = false;
-    private int playerDirection = 0;
-    private Vector2 input;
+    private float playerDirection = 0;
+    private Vector2 playerDirectionInVector2;
+    private Vector3 startPosition;
     public static int playerHealth = 9;
     public static int currentScore = 0;
     public static bool aliveState = true;
@@ -22,19 +24,51 @@ public class PlayerAttacking : MonoBehaviour {
 	void Update () {
         if (isAlive())
         {
-            input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-            decidePlayerDirection();
-            if (Input.GetButton("Fire1") && playerDirection != 0)
+            if (!isAttacking)
             {
-                isAttacking = true;
-                animateChar();
-                isAttacking = false;
+                playerDirection = animator.GetFloat("direction");
+                if (Input.GetButtonDown("Fire1") && playerDirection != 0)
+                {
+                    startPosition = transform.position;
+                    playerDirectionInVector2 = convertDirectionIntoVector2();
+                    boxCollider2D.enabled = false;
+                    RaycastHit2D hit = Physics2D.Raycast(startPosition, playerDirectionInVector2, gridSize);
+                    if (isWithinHittingRange(hit))
+                    {
+                        transform.position = new Vector3(startPosition.x + System.Math.Sign(playerDirectionInVector2.x) * gridSize, startPosition.y + System.Math.Sign(playerDirectionInVector2.y) * gridSize, startPosition.z);
+                        Invoke("returnToOrigialPlace", slashTeleBackWaitTime);
+                    }
+                    isAttacking = true;
+                    animateChar();
+                }
             }
         }
         else
         {
-            //Calls function in PlayerMovement  
+            //Calls level end function in PlayerMovement  
         }
+    }
+
+    private void returnToOrigialPlace()
+    {
+        transform.position = startPosition;
+        boxCollider2D.enabled = true;
+        isAttacking = false;
+    }
+
+    private bool isWithinHittingRange(RaycastHit2D hit)
+    {
+        if (hit.collider == null)
+        {
+            return false;
+        }
+        else if (hit.collider.tag == "Enemy")
+        {
+            print("Can Attack");
+            return true;
+        }
+        else
+            return false;
     }
 
     private bool isAlive()
@@ -54,32 +88,27 @@ public class PlayerAttacking : MonoBehaviour {
     private void animateChar()
     {
         if (isAttacking)
-        {
-            animator.SetBool("isAttacking", true);
-            animator.SetFloat("direction", playerDirection);
-        }
+            animator.SetTrigger("isAttacking");
         else
-        {
-            animator.SetBool("isAttacking", false);
-        }
-    }
-
-    private void decidePlayerDirection()
-    {
-        if (input.x == 1)
-            playerDirection = 2;
-        else if (input.x == -1)
-            playerDirection = 4;
-        else if (input.y == 1)
-            playerDirection = 1;
-        else if (input.y == -1)
-            playerDirection = 3;
-        else
-            playerDirection = 0;
+            print("No Animation to play");
     }
 
     public static void addPointsToCurrentScore(int points)
     {
         currentScore += points;
+    }
+
+    private Vector2 convertDirectionIntoVector2()
+    {
+        if (playerDirection == 1)
+            return new Vector2(0, 1);
+        else if (playerDirection == 2)
+            return new Vector2(1, 0);
+        else if (playerDirection == 3)
+            return new Vector2(0, -1);
+        else if (playerDirection == 4)
+            return new Vector2(-1, 0);
+        else
+            return new Vector2(0, 0);
     }
 }
