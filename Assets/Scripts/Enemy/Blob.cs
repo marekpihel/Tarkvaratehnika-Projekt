@@ -14,7 +14,7 @@ public class Blob : MonoBehaviour {
 	void Update () {
         if (isDead())
         {
-            Player.addPointsToCurrentScore(100);
+            PlayerAttacking.addPointsToCurrentScore(100);
             Destroy(this.gameObject);
         }
     }
@@ -25,9 +25,6 @@ public class Blob : MonoBehaviour {
         {
             return true;
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 }

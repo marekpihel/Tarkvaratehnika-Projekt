@@ -6,6 +6,7 @@ using System;
 public class PlayerMovement : MonoBehaviour {
     private float moveSpeed = 128f;
     public static float gridSize = 64f;
+    private float waitOnLevelSwitch = 0.5f;
     private Animator animator;
     private BoxCollider2D boxCollider2D;
     private Vector2 input;
@@ -25,16 +26,23 @@ public class PlayerMovement : MonoBehaviour {
     {
         if (!inGameUi.getIsPaused())
         {
-            if (!isMoving)
+            if (PlayerAttacking.aliveState)
             {
-                input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-                disableDiagonalMovement();
-                if (input != Vector2.zero)
-                    StartCoroutine(move(transform));
+                if (!isMoving)
+                {
+                    input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+                    disableDiagonalMovement();
+                    if (input != Vector2.zero)
+                        StartCoroutine(move(transform));
+                }
+                if (Input.GetButton("Jump"))
+                {
+                    this.transform.position = new Vector3(2944, -384, 0);
+                } 
             }
-            if (Input.GetButton("Jump"))
+            else
             {
-                this.transform.position = new Vector3(2944, -384, 0);
+                levelEnd();
             }
         }
     }
@@ -139,11 +147,28 @@ public class PlayerMovement : MonoBehaviour {
     {
         if (collisionObject.name == "trapdoorLevel2")
         {
-            movementAllowedAfterExit = false;
+            levelEnd();
         }
-        else if (collisionObject.name == "trapdoor")
-        {
-            movementAllowedAfterExit = false;
+        else if (collisionObject.name == "trapdoor") {
+            loadLevelTwo();
         }
+    }
+
+    private void loadLevelTwo()
+    {
+        SceneManager.LoadScene("LevelTwo");
+    }
+
+    public void levelEnd()
+    {
+        movementAllowedAfterExit = false;
+        Scoreboard.writeToScoreboard(SetName.getCharacterName(), PlayerAttacking.currentScore);
+        Invoke("loadHighScoreScene", waitOnLevelSwitch);
+    }
+
+    public void loadHighScoreScene()
+    {
+        Destroy(this.gameObject);
+        SceneManager.LoadScene("Highscore");
     }
 }
