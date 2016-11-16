@@ -27,23 +27,10 @@ public class BlobController : MonoBehaviour
 
     public void Update()
     {
-        if (isDead()) {
-            PlayerAttacking.addPointsToCurrentScore(100);
-            Destroy(this.gameObject);
-        }
-        else
-        {
-
-        }
+        
     }
 
-    private bool isDead()
-    {
-        if (blobHealth <= 0) {
-            return true;
-        }
-        return false;
-    }
+    
 
     private bool isAllowedToMove(RaycastHit2D hit)
     {
