@@ -12,6 +12,19 @@ public class BlobStats : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
-	}
+        if (isDead())
+        {
+            PlayerAttacking.addPointsToCurrentScore(100);
+            Destroy(this.gameObject);
+        }
+    }
+
+    private bool isDead()
+    {
+        if (blobHealth <= 0)
+        {
+            return true;
+        }
+        return false;
+    }
 }
