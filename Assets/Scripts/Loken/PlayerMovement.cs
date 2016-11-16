@@ -55,7 +55,7 @@ public class PlayerMovement : MonoBehaviour {
         float time = 0;
         Vector3 endPosition = new Vector3(startPosition.x + System.Math.Sign(input.x) * gridSize, startPosition.y + System.Math.Sign(input.y) * gridSize, startPosition.z);
         boxCollider2D.enabled = false;
-        RaycastHit2D hit = Physics2D.Raycast(startPosition, input, gridSize + 1);
+        RaycastHit2D hit = Physics2D.Raycast(startPosition, input, gridSize);
         boxCollider2D.enabled = true;
         if (isAllowedToMove(hit))
         {
