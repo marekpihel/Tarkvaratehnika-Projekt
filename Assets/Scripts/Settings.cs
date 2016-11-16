@@ -42,7 +42,6 @@ public class Settings : MonoBehaviour {
 	public void changeResolution(int index) {
 		string[] selected = resolutions [index].Split (' ');
 		string[] resolution = selected[1].Split('x');
-		Debug.Log (Int32.Parse(resolution[0])); // Int32.Parse for parsing string to int
 		Screen.SetResolution (Int32.Parse(resolution[0]), Int32.Parse(resolution[1]), true);
 	}
 

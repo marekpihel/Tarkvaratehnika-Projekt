@@ -145,6 +145,7 @@ public class PlayerMovement : MonoBehaviour {
 
     public void OnTriggerEnter2D(Collider2D collisionObject)
     {
+        print(collisionObject.name);
         if (collisionObject.name == "trapdoorLevel2")
         {
             levelEnd();
