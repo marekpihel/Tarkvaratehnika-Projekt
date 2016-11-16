@@ -35,14 +35,18 @@ public class BlobController : MonoBehaviour
     private bool isAllowedToMove(RaycastHit2D hit)
     {
         if (hit.collider == null)
+        {
             return true;
+        }
         else if (hit.collider.tag == "Player")
         {
             //Implement collision with Player, DMG taken and done.
             return false;
         }
         else
+        {
             return false;
+        }
     }
 
 

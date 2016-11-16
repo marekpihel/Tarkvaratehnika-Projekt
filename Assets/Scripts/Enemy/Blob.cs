@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BlobStats : MonoBehaviour {
+public class Blob : MonoBehaviour {
     public int blobHealth = 3;
     public int blobAttackDMG = 1;
 
@@ -14,7 +14,7 @@ public class BlobStats : MonoBehaviour {
 	void Update () {
         if (isDead())
         {
-            PlayerAttacking.addPointsToCurrentScore(100);
+            Player.addPointsToCurrentScore(100);
             Destroy(this.gameObject);
         }
     }
@@ -25,6 +25,9 @@ public class BlobStats : MonoBehaviour {
         {
             return true;
         }
-        return false;
+        else
+        {
+            return false;
+        }
     }
 }
