@@ -29,12 +29,12 @@ public class InGameUI : MonoBehaviour {
             if (!isPaused)
             {
                 pauseGame();
+                isPaused = true;
             }
             else {
                 resumeGame();
             }
-            isPaused = !isPaused;
-		}
+        }
     }
 
     private void pauseGame()
@@ -47,8 +47,10 @@ public class InGameUI : MonoBehaviour {
         return isPaused;
     }
 
-    public void resumeGame() { 
-		ingameQuitMenu.SetActive (false);
+    public void resumeGame()
+    {
+        isPaused = false;
+        ingameQuitMenu.SetActive (false);
 		Time.timeScale = 1;
 	}
 
