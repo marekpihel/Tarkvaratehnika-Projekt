@@ -25,6 +25,9 @@ public class Blob : MonoBehaviour {
         {
             return true;
         }
-        return false;
+        else
+        {
+            return false;
+        }
     }
 }
