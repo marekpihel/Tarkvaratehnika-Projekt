@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using System;
 
 public class PlayerMovement : MonoBehaviour {
     private float moveSpeed = 128f;
@@ -29,7 +30,7 @@ public class PlayerMovement : MonoBehaviour {
             {
                 if (!isMoving)
                 {
-                    input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));            // USE GetAxisRaw, edit animations to get same amount of frames, speak with Denis
+                    input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
                     disableDiagonalMovement();
                     if (input != Vector2.zero)
                         StartCoroutine(move(transform));
@@ -144,10 +145,18 @@ public class PlayerMovement : MonoBehaviour {
 
     public void OnTriggerEnter2D(Collider2D collisionObject)
     {
-        if (collisionObject.name == "trapdoor")
+        if (collisionObject.name == "trapdoorLevel2")
         {
             levelEnd();
         }
+        else if (collisionObject.name == "trapdoor") {
+            loadLevelTwo();
+        }
+    }
+
+    private void loadLevelTwo()
+    {
+        SceneManager.LoadScene("LevelTwo");
     }
 
     public void levelEnd()
