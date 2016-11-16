@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayerAttacking : MonoBehaviour
 {
@@ -29,6 +30,7 @@ public class PlayerAttacking : MonoBehaviour
     void Update()
     {
         if (!inGameUi.getIsPaused()) {
+            isAlive();
             if (aliveState && !isAttacking)
             {
                 playerDirection = animator.GetFloat("direction");
@@ -116,12 +118,25 @@ public class PlayerAttacking : MonoBehaviour
     {
         if (playerHealth <= 0)
         {
+            levelEnd();
             aliveState = false;
         }
         else
         {
             aliveState = true;
         }
+    }
+
+    public void levelEnd()
+    {
+        Scoreboard.writeToScoreboard(SetName.getCharacterName(), PlayerAttacking.currentScore);
+        Invoke("loadHighScoreScene", 0.5f);
+    }
+
+    public void loadHighScoreScene()
+    {
+        Destroy(this.gameObject);
+        SceneManager.LoadScene("Highscore");
     }
 
     private void animateChar()
