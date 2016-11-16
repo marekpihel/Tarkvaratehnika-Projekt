@@ -23,20 +23,27 @@ public class PlayerMovement : MonoBehaviour {
 
     void Update()
     {
-        if (PlayerAttacking.aliveState && !inGameUi.getIsPaused())
+        if (!inGameUi.getIsPaused())
         {
-            if (!isMoving)
+            if (PlayerAttacking.aliveState)
             {
-                input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));            // USE GetAxisRaw, edit animations to get same amount of frames, speak with Denis
-                disableDiagonalMovement();
-                if (input != Vector2.zero)
-                    StartCoroutine(move(transform));
+                if (!isMoving)
+                {
+                    input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));            // USE GetAxisRaw, edit animations to get same amount of frames, speak with Denis
+                    disableDiagonalMovement();
+                    if (input != Vector2.zero)
+                        StartCoroutine(move(transform));
+                }
+                if (Input.GetButton("Jump"))
+                {
+                    this.transform.position = new Vector3(2944, -384, 0);
+                } 
             }
-            if (Input.GetButton("Jump"))
-                this.transform.position = new Vector3(2944, -384, 0);
+            else
+            {
+                levelEnd();
+            }
         }
-        else
-            levelEnd();
     }
 
     private IEnumerator move(Transform transform)
@@ -59,12 +66,10 @@ public class PlayerMovement : MonoBehaviour {
             }
             transform.position = endPosition;
         }
-        else
-        {
-            //TO DO SOMETHING WHEN HITS THE WALL
-        }
         if (movementAllowedAfterExit)
+        {
             isMoving = false;
+        }
         animateChar();
         yield return 0;
     }
@@ -72,36 +77,54 @@ public class PlayerMovement : MonoBehaviour {
     private bool isAllowedToMove(RaycastHit2D hit)
     {
         if (hit.collider == null)
+        {
             return true;
+        }
         else if (hit.collider.tag == "Exit")
+        {
             return true;
+        }
         else if (hit.collider.tag == "Enemy")
         {
             Debug.Log("Walking Into Enemy");
             return false;
         }
         else
+        {
             return false;
+        }
     }
     private void disableDiagonalMovement()
     {
         if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
+        {
             input.y = 0;
+        }
         else
+        {
             input.x = 0;
+        }
         decidePlayerDirection();
     }
 
     private void decidePlayerDirection()
     {
         if (input.x == 1)
+        {
             playerDirection = 2;
+        }
         else if (input.x == -1)
+        {
             playerDirection = 4;
+        }
         else if (input.y == 1)
+        {
             playerDirection = 1;
+        }
         else if (input.y == -1)
+        {
             playerDirection = 3;
+        }
         animator.SetFloat("direction", playerDirection);
     }
 
@@ -114,13 +137,17 @@ public class PlayerMovement : MonoBehaviour {
             animator.SetFloat("input_y", input.y);
         }
         else
+        {
             animator.SetBool("isWalking", false);
+        }
     }
 
     public void OnTriggerEnter2D(Collider2D collisionObject)
     {
         if (collisionObject.name == "trapdoor")
+        {
             levelEnd();
+        }
     }
 
     public void levelEnd()

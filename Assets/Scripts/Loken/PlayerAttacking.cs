@@ -28,33 +28,31 @@ public class PlayerAttacking : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (aliveState && !isAttacking && !inGameUi.getIsPaused())
-        {
-             playerDirection = animator.GetFloat("direction");
-             if (Input.GetButtonDown("Fire1") && playerDirection != 0)
-             {
-                 input = convertDirectionToVector();
-                 startPosition = transform.position;
-                 boxCollider2D.enabled = false;
-                 RaycastHit2D hit = Physics2D.Raycast(startPosition, input, gridSize);
-                 if (isWithinHittingRange(hit))
-                 {
-                     transform.position = new Vector3(startPosition.x + System.Math.Sign(input.x) * gridSize, startPosition.y + System.Math.Sign(input.y) * gridSize, startPosition.z);
-                     Invoke("returnToOriginalPlace", slashTeleBackWaitTime);
-                     isAttacking = true;
-                     animateChar();
-                 }
-                 else
-                 {
-                     Invoke("setIsAttackFalse", slashTeleBackWaitTime);
-                     isAttacking = true;
-                     animateChar();
-                 }
-             }
-        }
-        else
-        {
-            //Calls levelEnd function in PlayerMovement  
+        if (!inGameUi.getIsPaused()) {
+            if (aliveState && !isAttacking)
+            {
+                playerDirection = animator.GetFloat("direction");
+                if (Input.GetButtonDown("Fire1") && playerDirection != 0)
+                {
+                    input = convertDirectionToVector();
+                    startPosition = transform.position;
+                    boxCollider2D.enabled = false;
+                    RaycastHit2D hit = Physics2D.Raycast(startPosition, input, gridSize);
+                    if (isWithinHittingRange(hit))
+                    {
+                        transform.position = new Vector3(startPosition.x + System.Math.Sign(input.x) * gridSize, startPosition.y + System.Math.Sign(input.y) * gridSize, startPosition.z);
+                        Invoke("returnToOriginalPlace", slashTeleBackWaitTime);
+                        isAttacking = true;
+                        animateChar();
+                    }
+                    else
+                    {
+                        Invoke("setIsAttackFalse", slashTeleBackWaitTime);
+                        isAttacking = true;
+                        animateChar();
+                    }
+                }
+            }
         }
     }
 
@@ -74,7 +72,9 @@ public class PlayerAttacking : MonoBehaviour
     private bool isWithinHittingRange(RaycastHit2D hit)
     {
         if (hit.collider == null)
+        {
             return false;
+        }
         else if (hit.collider.tag == "Enemy")
         {
             Debug.Log("Attacks Enemy");
@@ -84,37 +84,56 @@ public class PlayerAttacking : MonoBehaviour
             return true;
         }
         else
+        {
             return false;
+        }
     }
 
     private Vector2 convertDirectionToVector()
     {
         Vector2 vector = new Vector2();
         if (playerDirection == 1)
+        {
             vector = new Vector2(0, 1);
+        }
         else if (playerDirection == 2)
+        {
             vector = new Vector2(1, 0);
+        }
         else if (playerDirection == 3)
-            vector =  new Vector2(0, -1);
+        { 
+            vector = new Vector2(0, -1)
+                ;
+        }
         else if (playerDirection == 4)
+        {
             vector = new Vector2(-1, 0);
+        }
         return vector;
     }
 
     private void isAlive()
     {
         if (playerHealth <= 0)
+        {
             aliveState = false;
+        }
         else
+        {
             aliveState = true;
+        }
     }
 
     private void animateChar()
     {
         if (isAttacking)
+        {
             animator.SetTrigger("isAttacking");
+        }
         else
+        {
             print("No Animation to play");
+        }
     }
 
     public static void addPointsToCurrentScore(int points)
