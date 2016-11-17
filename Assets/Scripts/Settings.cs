@@ -42,7 +42,11 @@ public class Settings : MonoBehaviour {
 	public void changeResolution(int index) {
 		string[] selected = resolutions [index].Split (' ');
 		string[] resolution = selected[1].Split('x');
-		Screen.SetResolution (Int32.Parse(resolution[0]), Int32.Parse(resolution[1]), true);
+		if (Screen.fullScreen) {
+			Screen.SetResolution (Int32.Parse (resolution [0]), Int32.Parse (resolution [1]), true);
+		} else {
+			Screen.SetResolution (Int32.Parse(resolution[0]), Int32.Parse(resolution[1]), false);
+		}
 	}
 
 	public void backToMainMenu() {
