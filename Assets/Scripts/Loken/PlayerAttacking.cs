@@ -39,7 +39,7 @@ public class PlayerAttacking : MonoBehaviour
                     input = convertDirectionToVector();
                     startPosition = transform.position;
                     boxCollider2D.enabled = false;
-                    RaycastHit2D hit = Physics2D.Raycast(startPosition, input, gridSize);
+                    RaycastHit2D hit = Physics2D.Raycast(startPosition, input, gridSize + 2);
                     if (isWithinHittingRange(hit))
                     {
                         transform.position = new Vector3(startPosition.x + System.Math.Sign(input.x) * gridSize, startPosition.y + System.Math.Sign(input.y) * gridSize, startPosition.z);
