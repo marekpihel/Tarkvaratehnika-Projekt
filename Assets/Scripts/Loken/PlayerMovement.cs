@@ -15,6 +15,10 @@ public class PlayerMovement : MonoBehaviour {
     private float playerDirection = 0;
     private InGameUI inGameUi;
 
+    public float powerUpTime;
+    private readonly int LOKEN_MAX_HEALTH = 9;
+    private readonly int ATK_POWERUP_DURATION = 30;
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -24,6 +28,10 @@ public class PlayerMovement : MonoBehaviour {
 
     void Update()
     {
+        powerUpTime += Time.deltaTime;
+        if (powerUpTime >= ATK_POWERUP_DURATION) {
+            lowerLokenAtk();
+        }
         if (!inGameUi.getIsPaused())
         {
             if (PlayerAttacking.aliveState)
@@ -151,6 +159,25 @@ public class PlayerMovement : MonoBehaviour {
         }
         else if (collisionObject.name == "trapdoor") {
             loadLevelTwo();
+        }
+
+
+
+        else if (collisionObject.name == "HealthPowerUp") {
+            if (PlayerAttacking.playerHealth < LOKEN_MAX_HEALTH) {
+                PlayerAttacking.playerHealth += 1;
+                Destroy(collisionObject.gameObject);
+            }
+        } 
+        else if (collisionObject.name == "AttackPowerUp") {
+                PlayerAttacking.playerDMG += 1;
+                Destroy(collisionObject.gameObject);
+                powerUpTime = 0;
+        }
+    }
+    private void lowerLokenAtk() {
+        if (PlayerAttacking.playerDMG > 1) {
+            PlayerAttacking.playerDMG -= 1;
         }
     }
 
