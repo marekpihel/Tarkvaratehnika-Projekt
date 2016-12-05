@@ -5,7 +5,7 @@ public class GameSound : MonoBehaviour {
 
 	public float masterVolume;
 	public static GameSound instance = null;
-	private AudioSource backgroundMusic;
+	public static AudioSource backgroundMusic;
 
 	void Awake() {
 		if (instance == null) {

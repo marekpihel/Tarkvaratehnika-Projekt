@@ -6,8 +6,10 @@ using System.Collections.Generic;
 using System;
 
 public class Settings : MonoBehaviour {
+    public AudioSource volumeAudio;
+    private Slider volumeSlider;
 
-	public Dropdown resolutionDropdown;
+    public Dropdown resolutionDropdown;
 	List<string> resolutions = new List<string> () {"16:9 2560x1440", "16:9 1920x1080",
 		"16:9 1600x900", "16:9 1366x768", "16:9 1280x720", "16:9 1024x576", "16:9 854x480",
 		"16:10 2560x1600", "16:10 1920x1200", "16:10 1680x1050", "16:10 1440x900",
@@ -17,7 +19,9 @@ public class Settings : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		addResolutionsToDropdown ();
-	}
+        volumeSlider = GameObject.Find("Slider").GetComponent<Slider>();
+        volumeSlider.value = PlayerPrefs.GetFloat("currentVolume", volumeSlider.value);
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -27,13 +31,10 @@ public class Settings : MonoBehaviour {
 	}
 		
 	public void changeVolume() {
-		GameSound gameSound = GameSound.GetInstance();
-		float updatedVolume = GUILayout.HorizontalSlider (gameSound.masterVolume, 0.0f, 0.1f);
-		if (updatedVolume != gameSound.masterVolume) { // the volume have changed
-			gameSound.masterVolume = updatedVolume;
-			gameSound.updateBackgroundVolume ();
-		}
-	}
+        GameSound.backgroundMusic.volume = volumeSlider.value;
+        PlayerPrefs.SetFloat("currentVolume", volumeSlider.value);
+        PlayerPrefs.Save();
+    }
 
 	void addResolutionsToDropdown() {
 		resolutionDropdown.AddOptions (resolutions);
