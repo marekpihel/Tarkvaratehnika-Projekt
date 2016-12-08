@@ -14,6 +14,8 @@ public class RngMapGenerator : MonoBehaviour {
     public int maxWidth;
     public int maxHeight;
     public int maxRooms;
+    public int maxRoomWidth;
+    public int maxRoomHeight;
 
     // Gameobjects that we will instantiate on the map
     public GameObject wallTop;
@@ -21,34 +23,31 @@ public class RngMapGenerator : MonoBehaviour {
     public GameObject wallLower;
     public GameObject floor;
     public GameObject trapdoor;
+    public GameObject playerSpawner;
 
     // Path generation pointer
-    Vector2 pathGenerationPointer;
+    List<int> pathGenerationPointer;
     int pointerDirection;
 
     // Lists for path and map
     public List<List<int>> path;
     public List<List<int>> map;
 
-	// Use this for initialization
-	void Start () {
+    // Random numbers generator 
+    private System.Random randomGenerator;
+
+    // Use this for initialization
+    void Start () {
         map = new List<List<int>>();
+        path = new List<List<int>>();
+        pathGenerationPointer = new List<int>();
         initalizeEmptyMap();
         initalizeOuterWall();
         initializePlayerSpawnAndEnd();
-        drawMap();
-
-        //Show map for development purpoose
-        String mapString = "";
-        foreach (List<int> row in map)
-        {
-            String rowString = "";
-            foreach (int spot in row) {
-                rowString += spot;
-            }
-            mapString += rowString + "\n";
-        }
-        print(mapString);
+        initalizePathGenerator();
+        
+        instantiateMap();
+        randomGenerator = new System.Random();
         
 	}
 
@@ -98,10 +97,14 @@ public class RngMapGenerator : MonoBehaviour {
     {
         map[maxHeight - 5][1] = 8;
         map[3][maxWidth - 3] = 9;
+        //int roomWidth = randomGenerator.Next(2, )
+        
     }
 
     void initalizePathGenerator() {
-        
+        pathGenerationPointer.Add(1);
+        pathGenerationPointer.Add(maxHeight - 5);
+        path.Add(pathGenerationPointer);
     }
 
     void generatePath() {
@@ -112,35 +115,39 @@ public class RngMapGenerator : MonoBehaviour {
 
     }
 
-    void drawMap() {
+    void instantiateMap() {
         for (int row = 0; row < maxHeight; row++)
         {
             for (int column = 0; column < maxWidth; column++)
             {
-                print(map[row][column]);
-                if (map[row][column] == 0 || map[row][column] == 8)
+                if (map[row][column] == 0)
                 {
-                    floor.transform.position = new Vector3(64 * column, -64 * row, 0);
+                    floor.transform.position = new Vector3(64 * column, -64 * row, 5);
                     Instantiate<GameObject>(floor);
                 }
                 else if (map[row][column] == 1)
                 {
-                    wallTop.transform.position = new Vector3(64 * column, -64 * row, 0);
+                    wallTop.transform.position = new Vector3(64 * column, -64 * row, 5);
                     Instantiate<GameObject>(wallTop);
                 }
                 else if (map[row][column] == 2)
                 {
-                    wallUpper.transform.position = new Vector3(64 * column, -64 * row, 0);
+                    wallUpper.transform.position = new Vector3(64 * column, -64 * row, 5);
                     Instantiate<GameObject>(wallUpper);
                 }
                 else if (map[row][column] == 3)
                 {
-                    wallLower.transform.position = new Vector3(64 * column, -64 * row, 0);
+                    wallLower.transform.position = new Vector3(64 * column, -64 * row, 5);
                     Instantiate<GameObject>(wallLower);
                 }
-                else if (map[row][column] == 9) {
-                    trapdoor.transform.position = new Vector3(64 * column + 32, -64 * row - 32, 0);
+                else if (map[row][column] == 9)
+                {
+                    trapdoor.transform.position = new Vector3(64 * column + 32, -64 * row - 32, -3);
                     Instantiate<GameObject>(trapdoor);
+                }
+                else if (map[row][column] == 8) {
+                    playerSpawner.transform.position = new Vector3(64 * column + 32, -64 * row - 32, -5);
+                    Instantiate<GameObject>(playerSpawner);
                 }
             }
         }
