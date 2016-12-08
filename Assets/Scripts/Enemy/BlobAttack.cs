@@ -90,8 +90,7 @@ public class BlobAttack : MonoBehaviour {
         {
             blobMovement.disableMovement();
             Debug.Log("Attacks Player");
-            PlayerAttacking.playerHealth -= this.GetComponent<Blob>().blobAttackDMG;
-            Debug.Log(PlayerAttacking.playerHealth);
+            Player.playerHealth -= this.GetComponent<Blob>().blobAttackDMG;
             return true;
         }
         else

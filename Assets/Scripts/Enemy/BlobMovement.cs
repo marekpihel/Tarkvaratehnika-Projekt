@@ -5,11 +5,9 @@ using System;
 public class BlobMovement : MonoBehaviour {
     private float moveSpeed = 128f;
     private float gridSize = 64f;
-    private bool isMoving = false;
     private float cooldown;
     private int direction;
     private Animator animator;
-    private WaitForSeconds waitforseconds;
     private bool haventMoved;
     private BoxCollider2D boxCollider2D;
     private bool movementStatus;
@@ -17,7 +15,6 @@ public class BlobMovement : MonoBehaviour {
     // Use this for initialization
     void Start () {
         animator = this.GetComponent<Animator>();
-        waitforseconds = new WaitForSeconds(1);
         haventMoved = true;
         boxCollider2D = GetComponent<BoxCollider2D>();
         movementStatus = true;
@@ -132,7 +129,6 @@ public class BlobMovement : MonoBehaviour {
     private bool isAllowedToMove(Vector2 input)
     {
         Vector2 startPosition = transform.position;
-        Vector2 endPosition = new Vector3(startPosition.x, startPosition.y);
         boxCollider2D.enabled = false;
         RaycastHit2D hit128 = Physics2D.Raycast(startPosition, input, gridSize * 2);
         boxCollider2D.enabled = true;

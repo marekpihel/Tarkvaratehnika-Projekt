@@ -21,8 +21,8 @@ public class InGameUI : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        healthText.text = PlayerAttacking.playerHealth.ToString() ;
-        GameObject.Find("nameText").GetComponent<Text>().text = playerName + " : " + PlayerAttacking.currentScore;
+        healthText.text = Player.playerHealth.ToString() ;
+        GameObject.Find("nameText").GetComponent<Text>().text = playerName + " : " + Player.currentScore;
         GameObject.Find("timeText").GetComponent<Text>().text = Mathf.Round((float)GameTime.getPlayedTime())   + " s" ;
 
 		if (Input.GetButtonDown("Cancel")) {

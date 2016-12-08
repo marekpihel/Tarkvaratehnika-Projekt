@@ -14,7 +14,7 @@ public class Blob : MonoBehaviour {
 	void Update () {
         if (isDead())
         {
-            PlayerAttacking.addPointsToCurrentScore(100);
+            Player.addKillCredit(100, 1);
             Destroy(this.gameObject);
         }
     }

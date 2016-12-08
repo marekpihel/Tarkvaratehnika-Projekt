@@ -12,10 +12,6 @@ public class PlayerAttacking : MonoBehaviour
     private float playerDirection = 0;
     private Vector2 input;
     private Vector3 startPosition;
-    public static int playerHealth = 9;
-    public static int playerDMG = 1;
-    public static int currentScore = 0;
-    public static bool aliveState = true;
     private InGameUI inGameUi;
 
 
@@ -30,8 +26,7 @@ public class PlayerAttacking : MonoBehaviour
     void Update()
     {
         if (!inGameUi.getIsPaused()) {
-            isAlive();
-            if (aliveState && !isAttacking)
+            if (!isAttacking)
             {
                 playerDirection = animator.GetFloat("direction");
                 if (Input.GetButtonDown("Fire1") && playerDirection != 0)
@@ -79,10 +74,8 @@ public class PlayerAttacking : MonoBehaviour
         }
         else if (hit.collider.tag == "Enemy")
         {
-            Debug.Log("Attacks Enemy");
             Blob blob = hit.collider.gameObject.GetComponent<Blob>();
-            blob.blobHealth -= playerDMG;
-            Debug.Log(blob.blobHealth);
+            blob.blobHealth -= Player.playerDMG;
             return true;
         }
         else
@@ -114,31 +107,6 @@ public class PlayerAttacking : MonoBehaviour
         return vector;
     }
 
-    private void isAlive()
-    {
-        if (playerHealth <= 0)
-        {
-            levelEnd();
-            aliveState = false;
-        }
-        else
-        {
-            aliveState = true;
-        }
-    }
-
-    public void levelEnd()
-    {
-        Scoreboard.writeToScoreboard(SetName.getCharacterName(), PlayerAttacking.currentScore);
-        Invoke("loadHighScoreScene", 0.5f);
-    }
-
-    public void loadHighScoreScene()
-    {
-        Destroy(this.gameObject);
-        SceneManager.LoadScene("Highscore");
-    }
-
     private void animateChar()
     {
         if (isAttacking)
@@ -149,10 +117,5 @@ public class PlayerAttacking : MonoBehaviour
         {
             print("No Animation to play");
         }
-    }
-
-    public static void addPointsToCurrentScore(int points)
-    {
-        currentScore += points;
     }
 }

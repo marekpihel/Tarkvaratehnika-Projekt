@@ -6,18 +6,12 @@ using System;
 public class PlayerMovement : MonoBehaviour {
     private float moveSpeed = 128f;
     public static float gridSize = 64f;
-    private float waitOnLevelSwitch = 0.5f;
     private Animator animator;
     private BoxCollider2D boxCollider2D;
     private Vector2 input;
     private bool isMoving = false;
-    private bool movementAllowedAfterExit = true;
     private float playerDirection = 0;
     private InGameUI inGameUi;
-
-    public float powerUpTime;
-    private readonly int LOKEN_MAX_HEALTH = 9;
-    private readonly int ATK_POWERUP_DURATION = 30;
 
     void Start()
     {
@@ -28,30 +22,19 @@ public class PlayerMovement : MonoBehaviour {
 
     void Update()
     {
-        powerUpTime += Time.deltaTime;
-        if (powerUpTime >= ATK_POWERUP_DURATION) {
-            lowerLokenAtk();
-        }
         if (!inGameUi.getIsPaused())
         {
-            if (PlayerAttacking.aliveState)
+            if (!isMoving)
             {
-                if (!isMoving)
-                {
-                    input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-                    disableDiagonalMovement();
-                    if (input != Vector2.zero)
-                        StartCoroutine(move(transform));
-                }
-                if (Input.GetButton("Jump"))
-                {
-                    this.transform.position = new Vector3(2944, -384, 0);
-                } 
+                input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+                disableDiagonalMovement();
+                if (input != Vector2.zero)
+                    StartCoroutine(move(transform));
             }
-            else
+            if (Input.GetButton("Jump"))
             {
-                levelEnd();
-            }
+                this.transform.position = new Vector3(2944, -384, 0);
+            } 
         }
     }
 
@@ -75,10 +58,7 @@ public class PlayerMovement : MonoBehaviour {
             }
             transform.position = endPosition;
         }
-        if (movementAllowedAfterExit)
-        {
-            isMoving = false;
-        }
+        isMoving = false;
         animateChar();
         yield return 0;
     }
@@ -95,7 +75,6 @@ public class PlayerMovement : MonoBehaviour {
         }
         else if (hit.collider.tag == "Enemy")
         {
-            Debug.Log("Walking Into Enemy");
             return false;
         }
         else
@@ -103,6 +82,7 @@ public class PlayerMovement : MonoBehaviour {
             return false;
         }
     }
+
     private void disableDiagonalMovement()
     {
         if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
@@ -149,53 +129,5 @@ public class PlayerMovement : MonoBehaviour {
         {
             animator.SetBool("isWalking", false);
         }
-    }
-
-    public void OnTriggerEnter2D(Collider2D collisionObject)
-    {
-        if (collisionObject.name == "trapdoorLevel2")
-        {
-            levelEnd();
-        }
-        else if (collisionObject.name == "trapdoor") {
-            loadLevelTwo();
-        }
-
-
-
-        else if (collisionObject.name == "HealthPowerUp") {
-            if (PlayerAttacking.playerHealth < LOKEN_MAX_HEALTH) {
-                PlayerAttacking.playerHealth += 1;
-                Destroy(collisionObject.gameObject);
-            }
-        } 
-        else if (collisionObject.name == "AttackPowerUp") {
-                PlayerAttacking.playerDMG += 1;
-                Destroy(collisionObject.gameObject);
-                powerUpTime = 0;
-        }
-    }
-    private void lowerLokenAtk() {
-        if (PlayerAttacking.playerDMG > 1) {
-            PlayerAttacking.playerDMG -= 1;
-        }
-    }
-
-    private void loadLevelTwo()
-    {
-        SceneManager.LoadScene("LevelTwo");
-    }
-
-    public void levelEnd()
-    {
-        movementAllowedAfterExit = false;
-        Scoreboard.writeToScoreboard(SetName.getCharacterName(), PlayerAttacking.currentScore);
-        Invoke("loadHighScoreScene", waitOnLevelSwitch);
-    }
-
-    public void loadHighScoreScene()
-    {
-        Destroy(this.gameObject);
-        SceneManager.LoadScene("Highscore");
     }
 }
