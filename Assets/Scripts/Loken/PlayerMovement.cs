@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour {
     {
         animator = GetComponent<Animator>();
         boxCollider2D = GetComponent<BoxCollider2D>();
-        inGameUi = GameObject.Find("Map").GetComponent<InGameUI>();
+        inGameUi = GameObject.FindGameObjectWithTag("Map").GetComponent<InGameUI>();
     }
 
     void Update()

@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        ingameUi = GameObject.Find("Map").GetComponent<InGameUI>();
+        ingameUi = GameObject.FindGameObjectWithTag("Map").GetComponent<InGameUI>();
     }
 
     // Update is called once per frame
@@ -61,7 +61,7 @@ public class Player : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collisionObject)
     {
-        if (collisionObject.name == "trapdoorLevel2")
+        if (collisionObject.name == "trapdoorLevel2" || collisionObject.name == "trapdoorLevel2(Clone)")
         {
             levelEnd();
         }
