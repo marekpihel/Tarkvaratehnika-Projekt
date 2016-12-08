@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     private int playerDMGBasedOnLevel = 1;
     public static int currentScore = 0;
     public static int experiancePoints = 0;
-    private readonly int EXP_NEEDED_FOR_LEVEL_UP = 2;
+    private int expNeededToLevelUp = 2;
     private readonly int LOKEN_MAX_HEALTH = 9;
     private readonly int ATK_POWERUP_DURATION = 30;
     public float powerUpTime;
@@ -31,11 +31,12 @@ public class Player : MonoBehaviour
                 levelEnd();
                 Destroy(this.gameObject);
             }
-            if (experiancePoints >= EXP_NEEDED_FOR_LEVEL_UP)
+            if (experiancePoints >= expNeededToLevelUp)
             {
                 playerDMG += 1;
                 playerDMGBasedOnLevel += 1;
-                experiancePoints -= EXP_NEEDED_FOR_LEVEL_UP;
+                experiancePoints -= expNeededToLevelUp;
+                expNeededToLevelUp += 2;
                 Debug.Log("Leveled up");
             }
             powerUpTime += Time.deltaTime;
