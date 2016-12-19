@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 
-public class UIManager : MonoBehaviour {
+public class MainMenu : MonoBehaviour {
 
 	public Button playButton;
 	public Button highscoreButton;
