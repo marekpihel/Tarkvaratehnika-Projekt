@@ -8,12 +8,17 @@ public class RngMapGenerator : MonoBehaviour {
      * 1 - Wall top
      * 2 - Wall topside
      * 3 - Wall bottomside
+     * 4 - path
+     * 8 - Player spawn
+     * 9 - trapdoor
      * 
      */
     // Integers for for loops to generate the map
     public int maxWidth;
     public int maxHeight;
+
     public int maxRooms;
+
     public int maxRoomWidth;
     public int maxRoomHeight;
 
@@ -32,9 +37,8 @@ public class RngMapGenerator : MonoBehaviour {
     // Lists for path and map
     public List<List<int>> path;
     public List<List<int>> map;
+    
 
-    // Random numbers generator 
-    private System.Random randomGenerator;
 
     // Use this for initialization
     void Start () {
@@ -43,12 +47,12 @@ public class RngMapGenerator : MonoBehaviour {
         pathGenerationPointer = new List<int>();
         initalizeEmptyMap();
         initalizeOuterWall();
-        initializePlayerSpawnAndEnd();
         initalizePathGenerator();
+        generatePath();
+        initializePlayerSpawnAndEnd();
+        
         
         instantiateMap();
-        randomGenerator = new System.Random();
-        
 	}
 
     
@@ -97,7 +101,6 @@ public class RngMapGenerator : MonoBehaviour {
     {
         map[maxHeight - 5][1] = 8;
         map[3][maxWidth - 3] = 9;
-        //int roomWidth = randomGenerator.Next(2, )
         
     }
 
@@ -108,7 +111,49 @@ public class RngMapGenerator : MonoBehaviour {
     }
 
     void generatePath() {
+        while (pathGenerationPointer[0] != maxWidth - 3 && pathGenerationPointer[1] != 3)
+        {
+            /**
+             * 1 - up 
+             * 2 - right 
+             * */
+             
+            if (pathGenerationPointer[0] != maxRoomWidth - 3)
+            {
+                pointerDirection = (int)UnityEngine.Random.Range(1f, 2.99f);
+                if (pointerDirection == 1)
+                {
+                    pathGenerationPointer[1] -= 1;
+                }
+                else if (pointerDirection == 2)
+                {
+                    pathGenerationPointer[0] += 1;
+                }
+            }
+            else
+            {
+                pathGenerationPointer[1] -= 1;
+            }
+            foreach (List<int> spot in path)
+            {
+                print("X: " + spot[0] + " Y: " + spot[1]);
+            }
+            print(path.Count);
+            path.Add(pathGenerationPointer);
+        }
 
+        
+
+        for (int currentPoint = 0; currentPoint < path.Count; currentPoint++)
+        {
+            print(currentPoint);
+            int x = path[currentPoint][0];
+            int y = path[currentPoint][1];
+            map[y][x] = 4;
+            map[y][x + 1] = 4;
+            map[y + 1][x] = 4;
+            map[y + 1][x + 1] = 4;
+        }
     }
 
     void generateMap() {
@@ -116,6 +161,15 @@ public class RngMapGenerator : MonoBehaviour {
     }
 
     void instantiateMap() {
+        string mapstring = "";
+        foreach (List<int> row in map) {
+            foreach(int spot in row)
+            {
+                mapstring += spot.ToString();
+            }
+            mapstring += "\n";
+        }
+        print(mapstring);
         for (int row = 0; row < maxHeight; row++)
         {
             for (int column = 0; column < maxWidth; column++)
