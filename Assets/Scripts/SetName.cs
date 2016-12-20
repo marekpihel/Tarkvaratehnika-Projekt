@@ -21,11 +21,6 @@ public class SetName : MonoBehaviour {
 		if (Input.GetButton("Cancel")) {
 			backToMainMenu();
 		}
-        // Remove if no like----------------
-        if (Input.GetButton("Submit")) {
-            confirmCharacterName();
-        }
-        //-------------------------------------
     }
 	
 	public void setCharacterName(string inputFieldString) {
@@ -41,7 +36,7 @@ public class SetName : MonoBehaviour {
 			alertText.text = "Name cannot be longer than 20 characters!";
 		} else {
 			characterName = input;
-			loadFirstLevel();
+			chooseLevel ();
 		}
 	}
 
@@ -49,8 +44,8 @@ public class SetName : MonoBehaviour {
 		SceneManager.LoadScene ("MainMenu");
 	}
 
-	public void loadFirstLevel(){
-		SceneManager.LoadScene("LevelOne");
+	public void chooseLevel() {
+		SceneManager.LoadScene("SelectNormalOrRNG");
 	}
 
     public static string getCharacterName() {
