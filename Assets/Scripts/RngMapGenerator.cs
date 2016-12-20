@@ -111,48 +111,58 @@ public class RngMapGenerator : MonoBehaviour {
     }
 
     void generatePath() {
-        while (pathGenerationPointer[0] != maxWidth - 3 && pathGenerationPointer[1] != 3)
+        while (pathGenerationPointer[0] != maxWidth - 3 || pathGenerationPointer[1] != 3)
         {
+
             /**
+             * Directions:
              * 1 - up 
              * 2 - right 
              * */
-             
-            if (pathGenerationPointer[0] != maxRoomWidth - 3)
+
+            if (pathGenerationPointer[0] != maxWidth - 3)
             {
                 pointerDirection = (int)UnityEngine.Random.Range(1f, 2.99f);
-                if (pointerDirection == 1)
-                {
-                    pathGenerationPointer[1] -= 1;
+                if(pathGenerationPointer[1] != 3) {
+                    if (pointerDirection == 1)
+                    {
+                        pathGenerationPointer[1] -= 1;
+                    }
                 }
-                else if (pointerDirection == 2)
+                if (pathGenerationPointer[0] != maxWidth - 3)
                 {
-                    pathGenerationPointer[0] += 1;
+                    if (pointerDirection == 2)
+                    {
+                        pathGenerationPointer[0] += 1;
+                    }
                 }
             }
             else
             {
                 pathGenerationPointer[1] -= 1;
             }
+            path.Add(pathGenerationPointer);
             foreach (List<int> spot in path)
             {
-                print("X: " + spot[0] + " Y: " + spot[1]);
+                int x = spot[0];
+                int y = spot[1];
+                print("X: " + x + " Y: " + y);
+                map[y][x] = 4;
+                map[y][x + 1] = 4;
+                map[y + 1][x] = 4;
+                map[y + 1][x + 1] = 4;
             }
-            print(path.Count);
-            path.Add(pathGenerationPointer);
         }
+        map[maxHeight - 5][1] = 4;
+        map[maxHeight - 5][2] = 4;
+        map[maxHeight- 4][1] = 4;
+        map[maxHeight - 4][2] = 4;
 
-        
 
-        for (int currentPoint = 0; currentPoint < path.Count; currentPoint++)
+
+        foreach (List<int> spot in path)
         {
-            print(currentPoint);
-            int x = path[currentPoint][0];
-            int y = path[currentPoint][1];
-            map[y][x] = 4;
-            map[y][x + 1] = 4;
-            map[y + 1][x] = 4;
-            map[y + 1][x + 1] = 4;
+            
         }
     }
 
