@@ -48,7 +48,9 @@ public class RngMapGenerator : MonoBehaviour {
         initalizeEmptyMap();
         initalizeOuterWall();
         initalizePathGenerator();
-        generatePath();
+        generateRooms();
+        //generatePath();
+        
         initializePlayerSpawnAndEnd();
         
         
@@ -113,7 +115,6 @@ public class RngMapGenerator : MonoBehaviour {
     void generatePath() {
         while (pathGenerationPointer[0] != maxWidth - 3 || pathGenerationPointer[1] != 3)
         {
-
             /**
              * Directions:
              * 1 - up 
@@ -146,7 +147,6 @@ public class RngMapGenerator : MonoBehaviour {
             {
                 int x = spot[0];
                 int y = spot[1];
-                print("X: " + x + " Y: " + y);
                 map[y][x] = 4;
                 map[y][x + 1] = 4;
                 map[y + 1][x] = 4;
@@ -157,29 +157,78 @@ public class RngMapGenerator : MonoBehaviour {
         map[maxHeight - 5][2] = 4;
         map[maxHeight- 4][1] = 4;
         map[maxHeight - 4][2] = 4;
-
-
-
-        foreach (List<int> spot in path)
-        {
-            
-        }
     }
 
-    void generateMap() {
-
-    }
-
-    void instantiateMap() {
+    void generateRooms() {
         string mapstring = "";
-        foreach (List<int> row in map) {
-            foreach(int spot in row)
+        foreach (List<int> row in map)
+        {
+            foreach (int spot in row)
             {
                 mapstring += spot.ToString();
             }
             mapstring += "\n";
         }
         print(mapstring);
+
+        int roomsGenerated = 0;
+        while (roomsGenerated < maxRooms)
+        {
+            print("Generating rooms " + roomsGenerated);
+            List<int> roomDimensions = new List<int>();
+            List<int> originationPoint = new List<int>();
+            List<int> wallValues = new List<int>();
+            wallValues.Add(1);
+            wallValues.Add(2);
+            wallValues.Add(3);
+
+
+
+            int originationPointX = (int)UnityEngine.Random.Range(1f, maxWidth - maxRoomWidth + 0.99f);
+            int originationPointY = (int)UnityEngine.Random.Range(3f, maxHeight - maxRoomHeight + 0.99f);
+            print("-------------------");
+            print(originationPointX);
+            print(originationPointY);
+            originationPoint.Add(originationPointX);
+            originationPoint.Add(originationPointY);
+
+            roomDimensions.Add((int)UnityEngine.Random.Range(2f, maxRoomWidth + 0.99f));
+            roomDimensions.Add((int)UnityEngine.Random.Range(2f, maxRoomHeight + 0.99f));
+
+            print(originationPoint[1]);
+            print(originationPoint[0]);
+       
+            if (!wallValues.Contains(map[originationPoint[1]][originationPoint[0]]) 
+                && !wallValues.Contains(map[originationPoint[1]][originationPoint[0] + roomDimensions[0]]) 
+                && !wallValues.Contains(map[originationPoint[1]][originationPoint[0]]) 
+                && !wallValues.Contains(map[originationPoint[1] + roomDimensions[1]][originationPoint[0]]))
+            {
+                for (int roomX = originationPointX - 1; roomX < originationPointX + roomDimensions[0] + 2; roomX++) {
+                    for (int roomY = originationPointY - 3; roomY < originationPointY + roomDimensions[1] + 4; roomY++)
+                    {
+                        if (( roomX == originationPointX - 1
+                            || roomX == originationPointX + roomDimensions[0] + 1
+                            || roomY == originationPointY - 3
+                            || roomY == originationPointY + roomDimensions[1] + 1)
+                            && !(roomY == originationPointY + roomDimensions[1] + 3 || roomY == originationPointY + roomDimensions[1] + 2))
+                        {
+                            map[roomY][roomX] = 1;
+                        }
+                        else if (roomY == originationPointY - 2 || roomY == originationPointY + roomDimensions[1] + 2) {
+                            map[roomY][roomX] = 2;
+                        } else if (roomY == originationPointY - 1 || roomY == originationPointY + roomDimensions[1] + 3) {
+                            map[roomY][roomX] = 3;
+                        }
+                    }
+                }
+            }
+
+
+            roomsGenerated++;
+        }
+    }
+
+    void instantiateMap() {
         for (int row = 0; row < maxHeight; row++)
         {
             for (int column = 0; column < maxWidth; column++)
