@@ -29,6 +29,7 @@ public class RngMapGenerator : MonoBehaviour {
     public GameObject floor;
     public GameObject trapdoor;
     public GameObject playerSpawner;
+    public GameObject blobSpawner;
 
     // Path generation pointer
     List<int> pathGenerationPointer;
@@ -47,7 +48,7 @@ public class RngMapGenerator : MonoBehaviour {
         pathGenerationPointer = new List<int>();
         initalizeEmptyMap();
         initalizeOuterWall();
-        initalizePathGenerator();
+        //initalizePathGenerator();
         generateRooms();
         //generatePath();
         
@@ -241,11 +242,13 @@ public class RngMapGenerator : MonoBehaviour {
                     map[originationPoint[1] - 1][originationPoint[0] + 2] = 0;
                     map[originationPoint[1] - 2][originationPoint[0] + 2] = 0;
                     map[originationPoint[1] - 3][originationPoint[0] + 2] = 0;
+                    map[originationPoint[1] + roomDimensions[1] - 1][originationPoint[0]] = 6; // 6 - spawner
                 }
                 else if (doorDirection == 2)
                 {
                     map[originationPoint[1] + 1][originationPoint[0] + 1 + roomDimensions[0]] = 0;
                     map[originationPoint[1] + 2][originationPoint[0] + 1 + roomDimensions[0]] = 0;
+                    map[originationPoint[1] + roomDimensions[1] - 1][originationPoint[0]] = 6;
                 }
                 else if (doorDirection == 3)
                 {
@@ -255,11 +258,13 @@ public class RngMapGenerator : MonoBehaviour {
                     map[originationPoint[1] + 1 + roomDimensions[1]][originationPoint[0] + 2] = 0;
                     map[originationPoint[1] + 2 + roomDimensions[1]][originationPoint[0] + 2] = 0;
                     map[originationPoint[1] + 3 + roomDimensions[1]][originationPoint[0] + 2] = 0;
+                    map[originationPoint[1]][originationPoint[0] + roomDimensions[0] - 1] = 6;
                 }
                 else if (doorDirection == 4)
                 {
                     map[originationPoint[1] + 1][originationPoint[0] - 1] = 0;
                     map[originationPoint[1] + 2][originationPoint[0] - 1] = 0;
+                    map[originationPoint[1]][originationPoint[0] + roomDimensions[0] - 1] = 6;
                 }
             }
 
@@ -300,8 +305,17 @@ public class RngMapGenerator : MonoBehaviour {
                     Instantiate<GameObject>(trapdoor);
                 }
                 else if (map[row][column] == 8) {
+                    floor.transform.position = new Vector3(64 * column, -64 * row, 5);
+                    Instantiate<GameObject>(floor);
                     playerSpawner.transform.position = new Vector3(64 * column + 32, -64 * row - 32, -5);
                     Instantiate<GameObject>(playerSpawner);
+                }
+                else if (map[row][column] == 6)
+                {
+                    floor.transform.position = new Vector3(64 * column, -64 * row, 5);
+                    Instantiate<GameObject>(floor);
+                    blobSpawner.transform.position = new Vector3(64 * column + 32, -64 * row - 32, -5);
+                    Instantiate<GameObject>(blobSpawner);
                 }
             }
         }
