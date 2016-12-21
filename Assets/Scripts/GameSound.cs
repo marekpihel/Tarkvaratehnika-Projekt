@@ -6,6 +6,7 @@ public class GameSound : MonoBehaviour {
 	public float masterVolume;
 	public static GameSound instance = null;
 	public static AudioSource backgroundMusic;
+	public AudioSource swordSound;
 
 	void Awake() {
 		if (instance == null) {
@@ -33,6 +34,8 @@ public class GameSound : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-	
+		if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) {
+			swordSound.Play ();
+		}
 	}
 }
