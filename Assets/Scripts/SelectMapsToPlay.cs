@@ -5,9 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class SelectMapsToPlay : MonoBehaviour {
 
+	public Text alertText;
+
 	// Use this for initialization
 	void Start () {
-	
+		
 	}
 	
 	// Update is called once per frame
@@ -26,6 +28,7 @@ public class SelectMapsToPlay : MonoBehaviour {
 	}
 
 	public void playRngMap() {
+		alertText.text = "Loading RNG map...";
 		SceneManager.LoadScene ("RngMap");
 	}
 }
