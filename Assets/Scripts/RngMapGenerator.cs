@@ -32,12 +32,8 @@ public class RngMapGenerator : MonoBehaviour {
     public GameObject blobSpawner;
     public GameObject powerupSpawner;
 
-    // Path generation pointer
-    List<int> pathGenerationPointer;
-    int pointerDirection;
 
     // Lists for path and map
-    public List<List<int>> path;
     public List<List<int>> map;
     
 
@@ -45,13 +41,9 @@ public class RngMapGenerator : MonoBehaviour {
     // Use this for initialization
     void Start () {
         map = new List<List<int>>();
-        path = new List<List<int>>();
-        pathGenerationPointer = new List<int>();
         initalizeEmptyMap();
         initalizeOuterWall();
-        //initalizePathGenerator();
         generateRooms();
-        //generatePath();
         
         initializePlayerSpawnAndEnd();
         
@@ -106,59 +98,6 @@ public class RngMapGenerator : MonoBehaviour {
         map[maxHeight - 5][1] = 8;
         map[3][maxWidth - 3] = 9;
         
-    }
-
-    void initalizePathGenerator() {
-        pathGenerationPointer.Add(1);
-        pathGenerationPointer.Add(maxHeight - 5);
-        path.Add(pathGenerationPointer);
-    }
-
-    void generatePath() {
-        while (pathGenerationPointer[0] != maxWidth - 3 || pathGenerationPointer[1] != 3)
-        {
-            /**
-             * Directions:
-             * 1 - up 
-             * 2 - right 
-             * */
-
-            if (pathGenerationPointer[0] != maxWidth - 3)
-            {
-                pointerDirection = (int)UnityEngine.Random.Range(1f, 2.99f);
-                if(pathGenerationPointer[1] != 3) {
-                    if (pointerDirection == 1)
-                    {
-                        pathGenerationPointer[1] -= 1;
-                    }
-                }
-                if (pathGenerationPointer[0] != maxWidth - 3)
-                {
-                    if (pointerDirection == 2)
-                    {
-                        pathGenerationPointer[0] += 1;
-                    }
-                }
-            }
-            else
-            {
-                pathGenerationPointer[1] -= 1;
-            }
-            path.Add(pathGenerationPointer);
-            foreach (List<int> spot in path)
-            {
-                int x = spot[0];
-                int y = spot[1];
-                map[y][x] = 4;
-                map[y][x + 1] = 4;
-                map[y + 1][x] = 4;
-                map[y + 1][x + 1] = 4;
-            }
-        }
-        map[maxHeight - 5][1] = 4;
-        map[maxHeight - 5][2] = 4;
-        map[maxHeight- 4][1] = 4;
-        map[maxHeight - 4][2] = 4;
     }
 
     void generateRooms() {
