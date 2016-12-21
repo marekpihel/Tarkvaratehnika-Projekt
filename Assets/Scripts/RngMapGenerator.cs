@@ -172,57 +172,98 @@ public class RngMapGenerator : MonoBehaviour {
         print(mapstring);
 
         int roomsGenerated = 0;
-        while (roomsGenerated < maxRooms)
-        {
-            print("Generating rooms " + roomsGenerated);
+
+        while (roomsGenerated < maxRooms) {
             List<int> roomDimensions = new List<int>();
             List<int> originationPoint = new List<int>();
             List<int> wallValues = new List<int>();
             wallValues.Add(1);
             wallValues.Add(2);
             wallValues.Add(3);
-
-
-
-            int originationPointX = (int)UnityEngine.Random.Range(1f, maxWidth - maxRoomWidth + 0.99f);
-            int originationPointY = (int)UnityEngine.Random.Range(3f, maxHeight - maxRoomHeight + 0.99f);
-            print("-------------------");
-            print(originationPointX);
-            print(originationPointY);
-            originationPoint.Add(originationPointX);
-            originationPoint.Add(originationPointY);
+            bool canGenerateRoom = true;
 
             roomDimensions.Add((int)UnityEngine.Random.Range(2f, maxRoomWidth + 0.99f));
             roomDimensions.Add((int)UnityEngine.Random.Range(2f, maxRoomHeight + 0.99f));
 
-            print(originationPoint[1]);
-            print(originationPoint[0]);
-       
-            if (!wallValues.Contains(map[originationPoint[1]][originationPoint[0]]) 
-                && !wallValues.Contains(map[originationPoint[1]][originationPoint[0] + roomDimensions[0]]) 
-                && !wallValues.Contains(map[originationPoint[1]][originationPoint[0]]) 
-                && !wallValues.Contains(map[originationPoint[1] + roomDimensions[1]][originationPoint[0]]))
+            int originationPointX = (int)UnityEngine.Random.Range(3f, maxWidth - 5 - roomDimensions[0]);
+            int originationPointY = (int)UnityEngine.Random.Range(8f, maxHeight - 10 - roomDimensions[1]);
+            originationPoint.Add(originationPointX);
+            originationPoint.Add(originationPointY);
+
+            for (int xCoord = originationPoint[0] - 3; xCoord <= originationPoint[0] + roomDimensions[0] + 3; xCoord++)
             {
-                for (int roomX = originationPointX - 1; roomX < originationPointX + roomDimensions[0] + 2; roomX++) {
-                    for (int roomY = originationPointY - 3; roomY < originationPointY + roomDimensions[1] + 4; roomY++)
+                for (int yCoord = originationPoint[1] - 5; yCoord <= originationPoint[1] + roomDimensions[1] + 5; yCoord++)
+                {
+                    if (wallValues.Contains(map[yCoord][xCoord]))
                     {
-                        if (( roomX == originationPointX - 1
-                            || roomX == originationPointX + roomDimensions[0] + 1
-                            || roomY == originationPointY - 3
-                            || roomY == originationPointY + roomDimensions[1] + 1)
-                            && !(roomY == originationPointY + roomDimensions[1] + 3 || roomY == originationPointY + roomDimensions[1] + 2))
-                        {
-                            map[roomY][roomX] = 1;
-                        }
-                        else if (roomY == originationPointY - 2 || roomY == originationPointY + roomDimensions[1] + 2) {
-                            map[roomY][roomX] = 2;
-                        } else if (roomY == originationPointY - 1 || roomY == originationPointY + roomDimensions[1] + 3) {
-                            map[roomY][roomX] = 3;
-                        }
+                        canGenerateRoom = false;
                     }
+                }
+                if (!canGenerateRoom)
+                {
+                    break;
                 }
             }
 
+            if (canGenerateRoom) {
+                for (int xCoord = originationPoint[0] - 1; xCoord <= originationPoint[0] + roomDimensions[0] + 1; xCoord++)
+                {
+                    for (int yCoord = originationPoint[1] - 3; yCoord <= originationPoint[1] + roomDimensions[1] + 3; yCoord++)
+                    {
+                        if(yCoord == originationPoint[1] + roomDimensions[1] + 2)
+                        {
+                            map[yCoord][xCoord] = 2;
+                        } else if (yCoord == originationPoint[1] + roomDimensions[1] + 3)
+                        {
+                            map[yCoord][xCoord] = 3;
+                        } else if (yCoord == originationPoint[1] - 3 
+                            || yCoord == originationPoint[1] + roomDimensions[1] + 1
+                            || xCoord == originationPoint[0] - 1
+                            || xCoord == originationPoint[0] + roomDimensions[0] + 1)
+                        {
+                            map[yCoord][xCoord] = 1;
+                        } else if (yCoord == originationPoint[1] - 2)
+                        {
+                            map[yCoord][xCoord] = 2;
+                        } else if (yCoord == originationPoint[1] - 1)
+                        {
+                            map[yCoord][xCoord] = 3;
+                        }
+                    }
+                     
+                }
+                int doorDirection = (int)UnityEngine.Random.Range(1f, 4.99f);
+                if (doorDirection == 1)
+                {
+                    map[originationPoint[1] - 1][originationPoint[0] + 1] = 0;
+                    map[originationPoint[1] - 2][originationPoint[0] + 1] = 0;
+                    map[originationPoint[1] - 3][originationPoint[0] + 1] = 0;
+                    map[originationPoint[1] - 1][originationPoint[0] + 2] = 0;
+                    map[originationPoint[1] - 2][originationPoint[0] + 2] = 0;
+                    map[originationPoint[1] - 3][originationPoint[0] + 2] = 0;
+                }
+                else if (doorDirection == 2)
+                {
+                    map[originationPoint[1] + 1][originationPoint[0] + 1 + roomDimensions[0]] = 0;
+                    map[originationPoint[1] + 2][originationPoint[0] + 1 + roomDimensions[0]] = 0;
+                }
+                else if (doorDirection == 3)
+                {
+                    map[originationPoint[1] + 1 + roomDimensions[1]][originationPoint[0] + 1] = 0;
+                    map[originationPoint[1] + 2 + roomDimensions[1]][originationPoint[0] + 1] = 0;
+                    map[originationPoint[1] + 3 + roomDimensions[1]][originationPoint[0] + 1] = 0;
+                    map[originationPoint[1] + 1 + roomDimensions[1]][originationPoint[0] + 2] = 0;
+                    map[originationPoint[1] + 2 + roomDimensions[1]][originationPoint[0] + 2] = 0;
+                    map[originationPoint[1] + 3 + roomDimensions[1]][originationPoint[0] + 2] = 0;
+                }
+                else if (doorDirection == 4)
+                {
+                    map[originationPoint[1] + 1][originationPoint[0] - 1] = 0;
+                    map[originationPoint[1] + 2][originationPoint[0] - 1] = 0;
+                }
+            }
+
+            
 
             roomsGenerated++;
         }
