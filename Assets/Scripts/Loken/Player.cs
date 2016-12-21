@@ -69,7 +69,7 @@ public class Player : MonoBehaviour
         {
             loadLevelTwo();
         }
-        else if (collisionObject.name == "HealthPowerUp")
+        else if (collisionObject.name == "HealthPowerUp" || collisionObject.name == "HealthPowerUp(Clone)")
         {
             if (playerHealth < LOKEN_MAX_HEALTH)
             {
@@ -77,7 +77,7 @@ public class Player : MonoBehaviour
                 Destroy(collisionObject.gameObject);
             }
         }
-        else if (collisionObject.name == "AttackPowerUp")
+        else if (collisionObject.name == "AttackPowerUp" || collisionObject.name == "AttackPowerUp(Clone)")
         {
             playerDMG += 1;
             Destroy(collisionObject.gameObject);
