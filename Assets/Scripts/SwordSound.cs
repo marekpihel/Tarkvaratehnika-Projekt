@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class IngameSound : MonoBehaviour {
+public class SwordSound : MonoBehaviour {
 
 	public AudioSource swordSound;
 
 	// Use this for initialization
 	void Start () {
-	
+
 	}
 	
 	// Update is called once per frame
