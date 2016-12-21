@@ -30,6 +30,7 @@ public class RngMapGenerator : MonoBehaviour {
     public GameObject trapdoor;
     public GameObject playerSpawner;
     public GameObject blobSpawner;
+    public GameObject powerupSpawner;
 
     // Path generation pointer
     List<int> pathGenerationPointer;
@@ -211,13 +212,13 @@ public class RngMapGenerator : MonoBehaviour {
                 {
                     for (int yCoord = originationPoint[1] - 3; yCoord <= originationPoint[1] + roomDimensions[1] + 3; yCoord++)
                     {
-                        if(yCoord == originationPoint[1] + roomDimensions[1] + 2)
+                        if (yCoord == originationPoint[1] + roomDimensions[1] + 2)
                         {
                             map[yCoord][xCoord] = 2;
                         } else if (yCoord == originationPoint[1] + roomDimensions[1] + 3)
                         {
                             map[yCoord][xCoord] = 3;
-                        } else if (yCoord == originationPoint[1] - 3 
+                        } else if (yCoord == originationPoint[1] - 3
                             || yCoord == originationPoint[1] + roomDimensions[1] + 1
                             || xCoord == originationPoint[0] - 1
                             || xCoord == originationPoint[0] + roomDimensions[0] + 1)
@@ -231,7 +232,7 @@ public class RngMapGenerator : MonoBehaviour {
                             map[yCoord][xCoord] = 3;
                         }
                     }
-                     
+
                 }
                 int doorDirection = (int)UnityEngine.Random.Range(1f, 4.99f);
                 if (doorDirection == 1)
@@ -266,6 +267,7 @@ public class RngMapGenerator : MonoBehaviour {
                     map[originationPoint[1] + 2][originationPoint[0] - 1] = 0;
                     map[originationPoint[1]][originationPoint[0] + roomDimensions[0] - 1] = 6;
                 }
+                map[originationPoint[1]][originationPoint[0]] = 7;
             }
 
             
@@ -314,8 +316,15 @@ public class RngMapGenerator : MonoBehaviour {
                 {
                     floor.transform.position = new Vector3(64 * column, -64 * row, 5);
                     Instantiate<GameObject>(floor);
-                    blobSpawner.transform.position = new Vector3(64 * column + 32, -64 * row - 32, -5);
+                    blobSpawner.transform.position = new Vector3(64 * column + 32, -64 * row - 32, 0);
                     Instantiate<GameObject>(blobSpawner);
+                }
+                else if (map[row][column] == 7)
+                {
+                    floor.transform.position = new Vector3(64 * column, -64 * row, 5);
+                    Instantiate<GameObject>(floor);
+                    powerupSpawner.transform.position = new Vector3(64 * column + 32, -64 * row - 32, 0);
+                    Instantiate<GameObject>(powerupSpawner);
                 }
             }
         }
