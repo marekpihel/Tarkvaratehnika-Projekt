@@ -68,7 +68,8 @@ public class Player : MonoBehaviour
         }
         else if (collisionObject.name == "trapdoor")
         {
-            loadLevelTwo();
+			trapdoorSound.Play ();
+			Invoke("loadLevelTwo", 1.5f);
         }
         else if (collisionObject.name == "HealthPowerUp" || collisionObject.name == "HealthPowerUp(Clone)")
         {
