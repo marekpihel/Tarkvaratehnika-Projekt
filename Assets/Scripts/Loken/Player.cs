@@ -98,6 +98,7 @@ public class Player : MonoBehaviour
     }
     public void levelEnd()
     {
+		// trapdoor sound
         Scoreboard.writeToScoreboard(SetName.getCharacterName(), Player.currentScore);
         Invoke("loadHighScoreScene", 0.25f);
     }

@@ -31,6 +31,7 @@ public class Settings : MonoBehaviour {
 	}
 		
 	public void changeVolume() {
+		AudioListener.volume = volumeSlider.value;
         GameSound.backgroundMusic.volume = volumeSlider.value;
         PlayerPrefs.SetFloat("currentVolume", volumeSlider.value);
         PlayerPrefs.Save();
