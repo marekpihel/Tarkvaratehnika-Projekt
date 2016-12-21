@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     private readonly int ATK_POWERUP_DURATION = 30;
     public float powerUpTime;
     private InGameUI ingameUi;
+	public AudioSource trapdoorSound;
 
     // Use this for initialization
     void Start()
@@ -98,9 +99,9 @@ public class Player : MonoBehaviour
     }
     public void levelEnd()
     {
-		// trapdoor sound
+		trapdoorSound.Play ();
         Scoreboard.writeToScoreboard(SetName.getCharacterName(), Player.currentScore);
-        Invoke("loadHighScoreScene", 0.25f);
+        Invoke("loadHighScoreScene", 1.5f);
     }
 
     public void loadHighScoreScene()
