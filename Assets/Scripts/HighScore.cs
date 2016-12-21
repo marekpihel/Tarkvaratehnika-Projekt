@@ -17,6 +17,17 @@ public class HighScore : MonoBehaviour {
         playerScore = GameObject.Find("textScore").GetComponent<Text>();
         scoreBoardNumbering = GameObject.Find("scoreboardNumbering").GetComponent<Text>();
 
+        generateScoreboard();
+    }
+
+    // Update is called once per frame
+    void Update () {
+		if (Input.GetButton("Cancel")) {
+			backToMainMenu();
+		}
+	}
+
+    private void generateScoreboard() {
         foreach (KeyValuePair<string, int> entry in Scoreboard.readFromScoreboard()) {
             if (counter < 10) {
                 scoreBoardNumbering.text += (counter + 1) + ". \n";
@@ -26,15 +37,8 @@ public class HighScore : MonoBehaviour {
             }
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
-		if (Input.GetButton("Cancel")) {
-			backToMainMenu();
-		}
-	}
 
-	public void backToMainMenu() {
+    public void backToMainMenu() {
 		SceneManager.LoadScene ("MainMenu");
 	}
 }
