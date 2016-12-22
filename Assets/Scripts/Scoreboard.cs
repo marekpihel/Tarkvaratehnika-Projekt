@@ -13,7 +13,7 @@ public class Scoreboard : MonoBehaviour {
         scoreList.Add(currentPair);
         scoreList = orderByValue(scoreList);
 
-        File.WriteAllLines(@".\scoreboard.txt", scoreList.Select(value => value.ToString()).ToArray());
+        File.WriteAllLines("scoreboard.txt", scoreList.Select(value => value.ToString()).ToArray());
         return scoreList;
     }
 
@@ -29,7 +29,7 @@ public class Scoreboard : MonoBehaviour {
 
     private static List<KeyValuePair<string, int>> parseFileToList() {
         var temporaryList = new List<KeyValuePair<string, int>>();
-        string[] lines = File.ReadAllLines(@".\scoreboard.txt");
+        string[] lines = File.ReadAllLines("scoreboard.txt");
         for (int i = 0; i < lines.Length; i++) {
             string cleanString = lines[i].Replace("[", "").Replace("]", "");
             string[] line = cleanString.Split(',');
